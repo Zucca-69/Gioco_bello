@@ -8,7 +8,6 @@ castello.addCard("k")
 castello.addCard("J")
 castello.addCard("Q")
 
-print("ciao")
 #creo il mazzo da cui pescare
 taverna=Mazzo()
 taverna.addCard("A")
