@@ -21,7 +21,15 @@ class Player:
 
     #cards : list of played cards(dictionary)
     def calcolo(self,cards,enemy):
-        if cards.values()== "cuori" and enemy.values()!="cuori":
-            pass
-
+        danno= 0
+        if cards.values() != enemy.values():
+            if cards.values() == "cuori":
+                pass
+            elif cards.values() == "quadri":
+                pass
+            elif cards.values() == "picche":
+                self.__defence += danno
+            elif cards.values() == "fiori":
+                danno= danno * 2
+        return danno
     
