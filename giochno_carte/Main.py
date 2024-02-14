@@ -31,6 +31,12 @@ a= "troia"
 #creo gli scarti
 scarti=Mazzo()
 
+numGiocatori= int(input("num giocatori: ")) # idCount del server
+if numGiocatori > 2:
+    #add jolly
+    if numGiocatori == 4:
+        #add jolly
+        pass
 
 #creo un giocatore
 ferpetti=Player()
