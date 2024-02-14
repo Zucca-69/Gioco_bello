@@ -42,5 +42,8 @@ print(ferpetti.seeHand())
 nemico=Enemy(castello.pickCard())
 nemico.stats()
 
-
-#ferpetti.selectCard()
+re= 4
+while re > 0:
+    re= 0
+    #pass
+#ogni volta che un re cade, il contatore scala di 1
