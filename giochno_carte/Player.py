@@ -1,11 +1,15 @@
 
 class Player:
-    def __init__(self):
+    def __init__(self, numMaxCarte):
         self.__hand=[]
         self.__defence=[]
+        self.__numMaxCarte= numMaxCarte
 
     def draw(self,card):
-        self.__hand.append(card)
+        if len(self.__hand) < self.__numMaxCarte:
+           self.__hand.append(card)
+           return True
+        return False
 
     def seeHand(self):
         output=[]
@@ -20,7 +24,15 @@ class Player:
 
     #cards : list of played cards(dictionary)
     def calcolo(self,cards,enemy):
-        if cards.values()== "cuori" and enemy.values()!="cuori":
-            pass
-
+        damage= 0
+        if cards.values() != enemy.values():
+            if cards.values() == "cuori":
+                pass
+            elif cards.values() == "quadri":
+                pass
+            elif cards.values() == "picche":
+                self.__defence += damage
+            elif cards.values() == "fiori":
+                damage= damage * 2
+        return damage
     
