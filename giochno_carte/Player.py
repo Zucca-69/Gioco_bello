@@ -1,11 +1,15 @@
 
 class Player:
-    def __init__(self):
+    def __init__(self, numMaxCarte):
         self.__hand=[]
         self.__defence=[]
+        self.__numMaxCarte= numMaxCarte
 
     def draw(self,card):
-        self.__hand.append(card)
+        if len(self.__hand) < self.__numMaxCarte:
+           self.__hand.append(card)
+           return True
+        return False
 
     def seeHand(self):
         return self.__hand
