@@ -14,3 +14,4 @@ class Enemy:
         elif self.__card[0][0]=="J":
             self.__healt=20
             self.__attcack=10
+        return self.__healt, self.__attcack

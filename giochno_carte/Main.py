@@ -31,7 +31,8 @@ a= "troia"
 #creo gli scarti
 scarti=Mazzo()
 
-numGiocatori= int(input("num giocatori: ")) # idCount del server
+numGiocatori= 2#int(input("num giocatori: ")) # idCount del server
+#ogni player pesca in base al nplayer
 if numGiocatori > 2:
     #add jolly
     if numGiocatori == 4:
@@ -41,12 +42,16 @@ if numGiocatori > 2:
 #creo un giocatore
 ferpetti=Player()
 #pesco
-ferpetti.draw(taverna.pickCard())
+for i in range(8):  #range maxcard
+    ferpetti.draw(taverna.pickCard())
 print(ferpetti.seeHand())
 
 #creo e pesco nemico
 nemico=Enemy(castello.pickCard())
-nemico.stats()
+print(nemico.stats())
+
+
+ferpetti.selectCard(input(""))
 
 re= 4
 while re > 0:

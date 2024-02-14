@@ -8,7 +8,10 @@ class Player:
         self.__hand.append(card)
 
     def seeHand(self):
-        return self.__hand
+        output=[]
+        for i in self.__hand:
+            output.append(i[0])
+        return output
     
     def selectCard(self,card):
         if card in self.__hand:
