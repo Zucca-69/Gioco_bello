@@ -21,7 +21,7 @@ taverna.shuffle()
 
 print("\nMazzo dopo la mischiatura:")
 print(taverna.seeDeck())
-'''AIUTO NON FUNZIONA NULLA'''
+a= "troia"
 # print(taverna.pickCard())
 # print("\nMazzo dopo la rimozione:")
 # print(taverna.seeDeck())
