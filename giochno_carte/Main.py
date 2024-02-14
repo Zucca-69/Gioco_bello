@@ -1,12 +1,14 @@
 from Mazzo import*
 from Player import*
-from Campo import*
+from Enemy import*
 
 #creo il mazzo nemico
 castello=Mazzo()
-castello.addCard("k")
+castello.addCard("K")
 castello.addCard("J")
 castello.addCard("Q")
+
+castello.shuffle()
 
 #creo il mazzo da cui pescare
 taverna=Mazzo()
@@ -19,8 +21,8 @@ for i in range(2,11):
 
 taverna.shuffle()
 
-print("\nMazzo dopo la mischiatura:")
-print(taverna.seeDeck())
+#print("\nMazzo dopo la mischiatura:")
+#print(taverna.seeDeck())
 a= "troia"
 # print(taverna.pickCard())
 # print("\nMazzo dopo la rimozione:")
@@ -34,5 +36,11 @@ scarti=Mazzo()
 ferpetti=Player()
 #pesco
 ferpetti.draw(taverna.pickCard())
-# print(ferpetti.seeHand())
+print(ferpetti.seeHand())
 
+#creo e pesco nemico
+nemico=Enemy(castello.pickCard())
+nemico.stats()
+
+
+#ferpetti.selectCard()

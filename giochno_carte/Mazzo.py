@@ -28,5 +28,6 @@ class Mazzo:
     
     def pickCard(self):
         #è l'ultima carta ma dettagli, forse meglio così
+        #card=tupla
         card=self.__deck.popitem()
         return card

@@ -19,3 +19,5 @@ class Player:
     def calcolo(self,cards,enemy):
         if cards.values()== "cuori" and enemy.values()!="cuori":
             pass
+
+    
