@@ -1,7 +1,7 @@
 from Mazzo import*
 from Player import*
 from Campo import*
-
+print("hello")
 #creo il mazzo nemico
 castello=Mazzo()
 castello.addCard("k")
