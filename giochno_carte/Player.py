@@ -17,7 +17,6 @@ class Player:
             output.append(i[0])
         return output
     
-    #todo fai in modo che non chieda una tupla
     def selectCard(self,card):
         for i in self.__hand:
             if card in i[0]:
