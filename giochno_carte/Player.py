@@ -19,9 +19,11 @@ class Player:
     
     #todo fai in modo che non chieda una tupla
     def selectCard(self,card):
+        
         if card in self.__hand:
             self.__hand.pop(card)
             return card
+        return "nuh uh"
 
     #cards : list of played cards(dictionary)
     def calcolo(self,cards,enemy):
