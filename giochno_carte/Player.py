@@ -19,7 +19,7 @@ class Player:
     
     #todo fai in modo che non chieda una tupla
     def selectCard(self,card):
-        
+            
         if card in self.__hand:
             self.__hand.pop(card)
             return card
