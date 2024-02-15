@@ -40,9 +40,9 @@ if numGiocatori > 2:
         pass
 
 #creo un giocatore
-ferpetti=Player()
+ferpetti=Player(8) #todo range maxcard
 #pesco
-for i in range(8):  #range maxcard
+for i in range(8):  #todo range maxcard
     ferpetti.draw(taverna.pickCard())
 print(ferpetti.seeHand())
 
@@ -51,7 +51,7 @@ nemico=Enemy(castello.pickCard())
 print(nemico.stats())
 
 
-ferpetti.selectCard(input(""))
+print(ferpetti.selectCard(input("")))
 
 re= 4
 while re > 0:

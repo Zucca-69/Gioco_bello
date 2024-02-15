@@ -17,11 +17,12 @@ class Player:
             output.append(i[0])
         return output
     
-    #todo fai in modo che non chieda una tupla
     def selectCard(self,card):
-        if card in self.__hand:
-            self.__hand.pop(card)
-            return card
+        for i in self.__hand:
+            if card in i[0]:
+                self.__hand.remove(i)
+                return card
+        return "nuh uh"
 
     #cards : list of played cards(dictionary)
     def calcolo(self,cards,enemy):
