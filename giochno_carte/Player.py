@@ -22,10 +22,15 @@ class Player:
             if card in i[0]:
                 self.__hand.remove(i)
                 return card
+        #todo si potrebbe mettere 
+        # return selectCard(card)
+        # in modo che ci sia coerenza tra i valori ritornati 
+        # ed evitare possibili errori
         return "nuh uh"
 
     #cards : list of played cards(dictionary)
     def calcolo(self,cards,enemy):
+        #calcolo -> danno + effetti (se attivi)
         damage= 0
         if cards.values() != enemy.values():
             if cards.values() == "cuori":
