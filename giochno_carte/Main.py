@@ -27,7 +27,14 @@ for seme in ["picche","fiori","quadri","cuori"]:
     for numero in range(2,11):
         taverna.addCard(str(numero), seme)
 
-numGiocatori= 2 #int(input("num giocatori: ")) # idCount del server
+#creo giocatori
+ferpetti=Player() 
+# zucchetto= Player()
+# Pagliaccio= Player()
+giocatori= [ferpetti]#, zucchetto, Pagliaccio]
+
+
+numGiocatori= len(giocatori) #int(input("num giocatori: ")) # idCount del server
 # impostare il limite giocatori da 1 a 4
 
 #imposto i jolly e il num massimo di carte per giocatore in base al num giocatori
@@ -41,11 +48,9 @@ while numGiocatori > 1:
 #lo shuffle va fatto dopo l'aggiunta di eventuali Jolly
 taverna.shuffle() 
 
-#creo giocatori
-ferpetti=Player(numMaxCarte) 
-zucchetto= Player(numMaxCarte)
-Pagliaccio= Player(numMaxCarte)
-giocatori= [ferpetti, zucchetto, Pagliaccio]
+#imposto maxcarte ai giocatori
+for giocatore in giocatori:
+    giocatore.setMaxCarte(numMaxCarte)
 
 #ogni giocatore pesca
 for _ in range(numMaxCarte):
