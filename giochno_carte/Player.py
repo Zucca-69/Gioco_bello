@@ -1,8 +1,8 @@
 
 class Player:
     def __init__(self, numMaxCarte):
-        self.__hand=[]
-        self.__defence=[]
+        self.__hand= []
+        self.__defence= 0
         self.__numMaxCarte= numMaxCarte
 
     def draw(self,card):
@@ -22,19 +22,26 @@ class Player:
             if card in i[0]:
                 self.__hand.remove(i)
                 return card
-        return "nuh uh"
 
-    #cards : list of played cards(dictionary)
-    def calcolo(self,cards,enemy):
-        damage= 0
-        if cards.values() != enemy.values():
-            if cards.values() == "cuori":
+    #card : list of played card(dictionary)
+    def calcolo(self,card,enemy):
+        #calcolo -> danno + effetti (se attivi)
+        card_values= card.split("_")
+        if card_values[0] == "A":
+            damage= 1 
+        else:
+            damage= int(card_values[0])
+        
+        if card_values[1] != enemy.values()["seme"]:
+            if card_values[1] == "cuori":
                 pass
-            elif cards.values() == "quadri":
+            elif card_values[1] == "quadri":
                 pass
-            elif cards.values() == "picche":
+            elif card_values[1] == "picche":
                 self.__defence += damage
-            elif cards.values() == "fiori":
+            elif card_values[1] == "fiori":
                 damage= damage * 2
+            #effetto del Jolly
+            elif card_values[1] == None:
+                enemy.modSeme(None)
         return damage
-    

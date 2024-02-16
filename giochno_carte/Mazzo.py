@@ -3,17 +3,15 @@ import random
 class Mazzo:
     def __init__(self):
         self.__deck={}
-        self.__semi=("picche","fiori","quadri","cuori")
+        self.__semi=("picche","fiori","quadri","cuori", None)
 
-    def addCard(self,numero):
+    def addCard(self,numero, seme = None):
         if type(numero) == str:
-            for seme in self.__semi:
-                # Usiamo una chiave univoca per ogni carta (numero + seme)
+            if seme in self.__semi:
                 chiave_carta = f"{numero}_{seme}"
                 self.__deck[chiave_carta] = seme
             return True
-        else:
-            return False
+        return False
         
     def shuffle(self):
         # Estrai tutte le chiavi (carte) dal mazzo
@@ -28,6 +26,6 @@ class Mazzo:
     
     def pickCard(self):
         #è l'ultima carta ma dettagli, forse meglio così
-        #card=tupla
+        #card=tupla -> (chiave_carta, seme)
         card=self.__deck.popitem()
         return card

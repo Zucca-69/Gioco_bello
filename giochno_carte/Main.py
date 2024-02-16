@@ -1,60 +1,62 @@
-from Mazzo import*
-from Player import*
-from Enemy import*
-
-#creo il mazzo nemico
-castello=Mazzo()
-castello.addCard("K")
-castello.addCard("J")
-castello.addCard("Q")
-
-castello.shuffle()
-
-#creo il mazzo da cui pescare
-taverna=Mazzo()
-taverna.addCard("A")
-for i in range(2,11):
-    taverna.addCard(str(i))
-
-#print(f"CASTELLO:{castello.seeDeck()}")
-#print(f"TAVERNA{taverna.seeDeck()}")
-
-taverna.shuffle()
-
-#print("\nMazzo dopo la mischiatura:")
-#print(taverna.seeDeck())
-a= "troia"
-# print(taverna.pickCard())
-# print("\nMazzo dopo la rimozione:")
-# print(taverna.seeDeck())
+from Mazzo import *
+from Player import *
+from Enemy import *
 
 #creo gli scarti
 scarti=Mazzo()
 
-numGiocatori= 2#int(input("num giocatori: ")) # idCount del server
-#ogni player pesca in base al nplayer
-if numGiocatori > 2:
-    #add jolly
-    if numGiocatori == 4:
-        #add jolly
-        pass
+#creo il mazzo nemico
+castello=Mazzo()
+for seme in ["picche","fiori","quadri","cuori"]:
+    castello.addCard("K", seme)
+    castello.addCard("J", seme)
+    castello.addCard("Q", seme)
+castello.shuffle()
 
-#creo un giocatore
-ferpetti=Player(8) #todo range maxcard
-#pesco
-for i in range(8):  #todo range maxcard
+#creo il mazzo da cui pescare
+taverna=Mazzo()
+for seme in ["picche","fiori","quadri","cuori"]:
+    taverna.addCard("A", seme)
+    for numero in range(2,11):
+        taverna.addCard(str(numero), seme)
+
+numGiocatori= 2 #int(input("num giocatori: ")) # idCount del server
+# impostare il limite giocatori da 1 a 4
+
+#imposto i jolly e il num massimo di carte per giocatore in base al num giocatori
+numMaxCarte= 8
+while numGiocatori > 1:
+    numGiocatori-= 1
+    numMaxCarte-= 1
+    if numGiocatori > 2: 
+        taverna.addCard("Jolly")
+
+#lo shuffle va fatto dopo l'aggiunta di eventuali Jolly
+taverna.shuffle() 
+
+#creo giocatori
+ferpetti=Player(numMaxCarte) 
+zucchetto= Player(numMaxCarte)
+giocatori= [ferpetti, zucchetto]
+
+#ogni giocatore pesca
+for _ in range(numMaxCarte): 
     ferpetti.draw(taverna.pickCard())
-print(ferpetti.seeHand())
+    zucchetto.draw(taverna.pickCard())
 
 #creo e pesco nemico
-nemico=Enemy(castello.pickCard())
-print(nemico.stats())
-
-
-print(ferpetti.selectCard(input("")))
+nemico= Enemy()
+nemico.addStats(castello.pickCard())
 
 re= 4
 while re > 0:
-    re= 0
-    #pass
-#ogni volta che un re cade, il contatore scala di 1
+    for giocatore in giocatori:
+        print("\n---NUOVO TURNO---")
+        print(nemico.values())
+        print(giocatore.seeHand())
+        card= giocatore.selectCard(input("scegli una carta: "))
+        
+        #ogni volta che un re cade, il contatore scala di 1
+        if nemico.subisciDanno(giocatore.calcolo(card, nemico)):
+            re-= 4
+            break
