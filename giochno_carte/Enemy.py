@@ -1,4 +1,5 @@
 class Enemy:
+
     def __init__(self):
         self.__card= None
         self.__health= 0
@@ -33,4 +34,4 @@ class Enemy:
         return {"health" : self.__health, "attack" : self.__attack, "seme" : self.__seme}
 
     def getEnemy(self):
-        return self.__card #ho un dubbio su cosa far ritornare
+        return self.__card
