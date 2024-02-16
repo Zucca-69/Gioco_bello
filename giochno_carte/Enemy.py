@@ -1,4 +1,5 @@
 class Enemy:
+
     def __init__(self):
         self.__card= None
         self.__health= 0
@@ -32,5 +33,5 @@ class Enemy:
     def values(self): #ritorna le stat del nemico
         return {"health" : self.__health, "attack" : self.__attack, "seme" : self.__seme}
 
-    def getEnemy(self):
-        return card #ho un dubbio su cosa far ritornare
+    #def getEnemy(self):
+    #    return card #ho un dubbio su cosa far ritornare
