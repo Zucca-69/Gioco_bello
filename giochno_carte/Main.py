@@ -2,6 +2,13 @@ from Mazzo import *
 from Player import *
 from Enemy import *
 
+########################################################################
+#todo: add rinuncia (fase 1)
+#todo: add effetti cuori e quadri
+#todo: add nemico colpisce (fase 4)
+#todo: add più carte giocabili (asso)
+
+########################################################################
 #creo gli scarti
 scarti=Mazzo()
 
@@ -37,12 +44,13 @@ taverna.shuffle()
 #creo giocatori
 ferpetti=Player(numMaxCarte) 
 zucchetto= Player(numMaxCarte)
-giocatori= [ferpetti, zucchetto]
+Pagliaccio= Player(numMaxCarte)
+giocatori= [ferpetti, zucchetto, Pagliaccio]
 
 #ogni giocatore pesca
-for _ in range(numMaxCarte): 
-    ferpetti.draw(taverna.pickCard())
-    zucchetto.draw(taverna.pickCard())
+for _ in range(numMaxCarte):
+    for i in giocatori:
+        i.draw(taverna.pickCard())
 
 #creo e pesco nemico
 nemico= Enemy()
@@ -52,11 +60,12 @@ re= 4
 while re > 0:
     for giocatore in giocatori:
         print("\n---NUOVO TURNO---")
-        print(nemico.values())
+        print(nemico.getEnemy()[0],nemico.getStats())
         print(giocatore.seeHand())
         card= giocatore.selectCard(input("scegli una carta: "))
         
         #ogni volta che un re cade, il contatore scala di 1
         if nemico.subisciDanno(giocatore.calcolo(card, nemico)):
-            re-= 4
-            break
+            if nemico.getStats()["attack"]==20:
+                re-= 1
+            nemico.addStats(castello.pickCard())

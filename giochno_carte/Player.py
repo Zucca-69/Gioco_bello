@@ -29,10 +29,12 @@ class Player:
         card_values= card.split("_")
         if card_values[0] == "A":
             damage= 1 
+        elif card_values[0] == "Jolly":
+            damage= 0
         else:
             damage= int(card_values[0])
         
-        if card_values[1] != enemy.values()["seme"]:
+        if card_values[1] != enemy.getStats()["seme"]:
             if card_values[1] == "cuori":
                 pass
             elif card_values[1] == "quadri":

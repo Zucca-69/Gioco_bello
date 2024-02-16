@@ -30,8 +30,8 @@ class Enemy:
     def modSeme(self, nuovo_seme):
         self.__seme= nuovo_seme
 
-    def values(self): #ritorna le stat del nemico
+    def getStats(self): #ritorna le stat del nemico
         return {"health" : self.__health, "attack" : self.__attack, "seme" : self.__seme}
 
-    #def getEnemy(self):
-    #    return card #ho un dubbio su cosa far ritornare
+    def getEnemy(self):
+        return self.__card
