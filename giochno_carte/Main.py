@@ -1,6 +1,6 @@
-from Mazzo import*
-from Player import*
-from Enemy import*
+from Mazzo import *
+from Player import *
+from Enemy import *
 
 #creo gli scarti
 scarti=Mazzo()
@@ -26,6 +26,7 @@ numGiocatori= 2 #int(input("num giocatori: ")) # idCount del server
 #imposto i jolly e il num massimo di carte per giocatore in base al num giocatori
 numMaxCarte= 8
 while numGiocatori > 1:
+    numGiocatori-= 1
     numMaxCarte-= 1
     if numGiocatori > 2: 
         taverna.addCard("Jolly")
@@ -36,22 +37,26 @@ taverna.shuffle()
 #creo giocatori
 ferpetti=Player(numMaxCarte) 
 zucchetto= Player(numMaxCarte)
+giocatori= [ferpetti, zucchetto]
 
 #ogni giocatore pesca
 for _ in range(numMaxCarte): 
     ferpetti.draw(taverna.pickCard())
     zucchetto.draw(taverna.pickCard())
-print(ferpetti.seeHand())
-print(zucchetto.seeHand())
 
 #creo e pesco nemico
 nemico= Enemy()
-nemico.stats(castello.pickCard())
-print(nemico.values())
-
-print(ferpetti.selectCard(input("scegli una carta: ")))
+nemico.addStats(castello.pickCard())
 
 re= 4
 while re > 0:
-    re-= 1
-#ogni volta che un re cade, il contatore scala di 1
+    for giocatore in giocatori:
+        print("\n---NUOVO TURNO---")
+        print(nemico.values())
+        print(giocatore.seeHand())
+        card= giocatore.selectCard(input("scegli una carta: "))
+        
+        #ogni volta che un re cade, il contatore scala di 1
+        if nemico.subisciDanno(giocatore.calcolo(card, nemico)):
+            re-= 4
+            break
