@@ -1,6 +1,6 @@
 
 class Player:
-    def __init__(self, numMaxCarte):
+    def __init__(self, numMaxCarte=0):
         self.__hand= []
         self.__defence= 0
         self.__numMaxCarte= numMaxCarte
@@ -22,6 +22,9 @@ class Player:
             if card in i[0]:
                 self.__hand.remove(i)
                 return card
+
+    def setMaxCarte(self,maxCarte):
+        self.__numMaxCarte= maxCarte
 
     #card : list of played card(dictionary)
     def calcolo(self,card,enemy):
