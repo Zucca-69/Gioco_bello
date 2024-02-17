@@ -61,7 +61,8 @@ nemico= Enemy()
 nemico.addStats(castello.pickCard())
 
 re= 4
-while re > 0:
+continua=True
+while re > 0 and continua:
     for giocatore in giocatori:
         print("\n---NUOVO TURNO---")
         print(nemico.getEnemy()[0],nemico.getStats())
@@ -94,3 +95,9 @@ while re > 0:
             if nemico.getStats()["attack"]==20:
                 re-= 1
             nemico.addStats(castello.pickCard())
+
+        else:
+             if giocatore.subisciDanno(nemico.getStats()["attack"])==False:
+                 print("sei morto skill issue")
+                 continua=False
+                 break

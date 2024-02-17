@@ -51,3 +51,14 @@ class Player:
             elif card_values[1] == None:
                 enemy.modSeme(None)
         return damage,stato
+    
+    #nemico= danno del nemico (si è già il danno)
+    def subisciDanno(self,nemico):
+        danno=nemico-self.__defence
+        while danno>0 and len(self.__hand)>0:
+            print(f"danno da difendere: {danno}")
+            print(self.seeHand())
+            danno-=int(self.selectCard(input("scegli una carta per difenderti: ")[0]))
+        if danno >0:
+            return False
+        return True
