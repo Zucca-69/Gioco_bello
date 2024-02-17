@@ -62,3 +62,6 @@ class Player:
         if danno >0:
             return False
         return True
+    
+    def defenceReset(self):
+        self.__defence=0

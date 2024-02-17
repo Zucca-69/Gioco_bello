@@ -94,6 +94,8 @@ while re > 0 and continua:
             if nemico.getStats()["attack"]==20:
                 re-= 1
             nemico.addStats(castello.pickCard())
+            for i in giocatori:
+                i.__defence=0
 
         else:
              if giocatore.subisciDanno(nemico.getStats()["attack"])==False:
