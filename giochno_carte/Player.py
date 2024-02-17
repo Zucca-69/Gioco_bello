@@ -36,12 +36,13 @@ class Player:
             damage= 0
         else:
             damage= int(card_values[0])
-        
+        stato=None
+
         if card_values[1] != enemy.getStats()["seme"]:
             if card_values[1] == "cuori":
-                pass
+                stato="cuori"
             elif card_values[1] == "quadri":
-                pass
+                stato="quadri"
             elif card_values[1] == "picche":
                 self.__defence += damage
             elif card_values[1] == "fiori":
@@ -49,4 +50,15 @@ class Player:
             #effetto del Jolly
             elif card_values[1] == None:
                 enemy.modSeme(None)
-        return damage
+        return damage,stato
+    
+    #nemico= danno del nemico (si è già il danno)
+    def subisciDanno(self,nemico):
+        danno=nemico-self.__defence
+        while danno>0 and len(self.__hand)>0:
+            print(f"danno da difendere: {danno}")
+            print(self.seeHand())
+            danno-=int(self.selectCard(input("scegli una carta per difenderti: ")[0]))
+        if danno >0:
+            return False
+        return True
