@@ -4,7 +4,6 @@ from Enemy import *
 
 ########################################################################
 #todo: add rinuncia (fase 1)
-#todo: add nemico colpisce (fase 4)
 #todo: add più carte giocabili (asso,combinazioni)
 
 ########################################################################
