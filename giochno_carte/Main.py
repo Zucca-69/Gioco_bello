@@ -98,16 +98,15 @@ while re > 0 and continua:
                             pesca=True
                             count+=1
 
-        #ogni volta che un re cade, il contatore scala di 1
-        if nemico.subisciDanno(attacco[0]): #verifica morte
-            if nemico.getStats()["attack"]==20:
-                re-= 1
-            nemico.addStats(castello.pickCard())
-            for i in giocatori:
-                i.defenceReset()
+            #ogni volta che un re cade, il contatore scala di 1
+            if nemico.subisciDanno(attacco[0]): #verifica morte
+                if nemico.getStats()["attack"]==20:
+                    re-= 1
+                nemico.addStats(castello.pickCard())
+                for i in giocatori:
+                    i.defenceReset()
 
-        else: #se è ancora vivo attacca
-            continua= giocatore.subisciDanno(nemico.getStats()["attack"])
-            if continua == False: #morte
-                print("sei morto skill issue")
-                break
+        continua= giocatore.subisciDanno(nemico.getStats()["attack"])
+        if continua == False: #morte
+            print("sei morto skill issue")
+            break

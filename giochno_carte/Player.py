@@ -71,6 +71,8 @@ class Player:
                     difesa = 15
                 elif difesa == "K":
                     difesa = 20 
+            if difesa == "1":
+                difesa = 10
             danno -= int(difesa) #calcolo effettivo
         if danno > 0: #verifica se è riuscito a difendere
             return False #morto
