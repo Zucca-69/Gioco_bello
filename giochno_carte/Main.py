@@ -4,9 +4,7 @@ from Enemy import *
 
 ########################################################################
 #todo: add rinuncia (fase 1)
-#todo: add effetti cuori e quadri
-#todo: add nemico colpisce (fase 4)
-#todo: add più carte giocabili (asso)
+#todo: add più carte giocabili (asso,combinazioni)
 
 ########################################################################
 #creo gli scarti
@@ -62,15 +60,45 @@ nemico= Enemy()
 nemico.addStats(castello.pickCard())
 
 re= 4
-while re > 0:
+continua=True
+while re > 0 and continua:
     for giocatore in giocatori:
         print("\n---NUOVO TURNO---")
         print(nemico.getEnemy()[0],nemico.getStats())
         print(giocatore.seeHand())
         card= giocatore.selectCard(input("scegli una carta: "))
-        
+
+        attacco= giocatore.calcolo(card, nemico)
+        if attacco[1] == "cuori":
+            scarti.shuffle()
+            for _ in range(attacco[0]):
+                if len(scarti.seeDeck())>0:
+                    carta_pescata=scarti.pickCard()[0].split("_")
+                    taverna.addCard(carta_pescata[1],carta_pescata[0])
+                else:
+                    break
+
+        elif attacco[1] == "quadri":
+            pesca=True
+            count=0
+            while count<attacco[0] and pesca:
+                pesca=False
+                for i in giocatori:
+                    if len(i.seeHand())<numMaxCarte:
+                        i.draw(taverna.pickCard())
+                        pesca=True
+                        count+=1
+
         #ogni volta che un re cade, il contatore scala di 1
-        if nemico.subisciDanno(giocatore.calcolo(card, nemico)):
+        if nemico.subisciDanno(attacco[0]):
             if nemico.getStats()["attack"]==20:
                 re-= 1
             nemico.addStats(castello.pickCard())
+            for i in giocatori:
+                i.defenceReset()
+
+        else:
+             if giocatore.subisciDanno(nemico.getStats()["attack"])==False:
+                 print("sei morto skill issue")
+                 continua=False
+                 break
