@@ -57,7 +57,7 @@ class Player:
         danno=danno-self.__defence
 
         while danno > 0 and len(self.__hand) > 0: # ciclo per la difesa
-            print(f"danno da difendere: {danno}")
+            print(f"\ndanno da difendere: {danno}")
             print(self.seeHand())
             difesa = self.selectCard(input("scegli una carta per difenderti: ")[0])
 

@@ -70,7 +70,7 @@ while re > 0 and continua:
 
         #chiedi per rinuncia
         rinuncia= input("vuoi rinunciare? (s/n): ")
-        if rinuncia[0] == "n":
+        if rinuncia == "" or rinuncia[0].lower() != "s":
 
             #scegli la carta e attacca
             card= giocatore.selectCard(input("scegli una carta: "))
