@@ -99,7 +99,7 @@ while re > 0 and continua:
             #scegli la carta e attacca
             card= giocatore.selectCard(input("scegli una carta: "))
             if card[0]=="A":
-                #chiedi per rinuncia
+                #chiedi per giocare un altra carta
                 seconda_carta= input("vuoi giocare un altra carta? (s/n): ")
                 if seconda_carta == "" or seconda_carta[0].lower() == "s":
                     second_card= giocatore.selectCard(input("scegli una altra carta: "))
