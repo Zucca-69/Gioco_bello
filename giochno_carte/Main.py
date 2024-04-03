@@ -91,7 +91,7 @@ while re > 0 and continua:
     for giocatore in giocatori:
         sconfittoNelTurno= False
         print("\n---NUOVO TURNO---")
-        print(nemico.getEnemy()[0],nemico.getStats())
+        print(nemico.getEnemyCard()[0],nemico.getStats())
         print(giocatore.seeHand())
 
         #chiedi per rinuncia
@@ -103,6 +103,7 @@ while re > 0 and continua:
             if card[0]=="A":
                 #chiedi per giocare un altra carta
                 seconda_carta= input("vuoi giocare un altra carta? (s/n): ")
+                print(giocatore.seeHand())
                 if seconda_carta == "" or seconda_carta[0].lower() == "s":
                     second_card= giocatore.selectCard(input("scegli una altra carta: "))
                     second_attack=giocatore.calcolo(second_card, nemico)
@@ -116,13 +117,21 @@ while re > 0 and continua:
             attacco= giocatore.calcolo(card, nemico)
             effetti(attacco)
 
-            #ogni volta che un re cade, il contatore scala di 1
-            if nemico.subisciDanno(attacco[0]): #verifica morte
+            risultatoAttacco = nemico.subisciDanno(attacco[0])
+            # se il nemico viene sconfitto nemico sconfitto
+            if  risultatoAttacco[0] == True: 
                 sconfittoNelTurno = True
-                if nemico.getStats()["attack"]==20:
+                print("nemico sconfitto")
+                # conquistato (?)  
+                if risultatoAttacco[1] == True: 
+                    print("nemico conquistato")
+                    taverna.addCard(nemico.getEnemyCard())
+                # se è un re, abbasso il counter
+                if nemico.getStats()["attack"]==20: 
                     re-= 1
                 nemico.addStats(castello.pickCard())
-                for i in giocatori:
+                # azzero la difesa una volta finito lo scontro
+                for i in giocatori: 
                     i.defenceReset()
     
         if sconfittoNelTurno == False:

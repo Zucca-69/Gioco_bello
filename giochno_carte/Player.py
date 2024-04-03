@@ -18,9 +18,10 @@ class Player:
     
     def selectCard(self, card):
         for i in self.__hand:
-            if card in i[0]:
+            if card == i[0]:
                 self.__hand.remove(i)
                 return card
+        return False
 
     def setMaxCarte(self, maxCarte):
         self.__numMaxCarte= maxCarte
@@ -64,7 +65,7 @@ class Player:
             #taduzione dei simboli in valori per la difesa
             if difesa == "1":
                 difesa = 10
-            if difesa.isalpha():
+            elif difesa.isalpha():
                 if difesa == "A":
                     difesa = 1
                 elif difesa == "J":
