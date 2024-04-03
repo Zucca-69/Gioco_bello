@@ -4,6 +4,7 @@ from Enemy import *
 
 ###################################################
 #todo: add più carte giocabili (asso,combinazioni)#
+#toto: add conquista dei nemici se portati a 0 hp #
 ###################################################
 
 def effetti(att):
@@ -105,6 +106,10 @@ while re > 0 and continua:
                     second_card= giocatore.selectCard(input("scegli una altra carta: "))
                     second_attack=giocatore.calcolo(second_card, nemico)
                     effetti(second_attack)
+                    
+            # TODO: mettere le più carte giocabili qui
+            elif card[0]:
+                pass
 
             attacco= giocatore.calcolo(card, nemico)
 

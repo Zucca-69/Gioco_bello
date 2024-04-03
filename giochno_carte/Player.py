@@ -62,6 +62,8 @@ class Player:
             difesa = self.selectCard(input("scegli una carta per difenderti: ")[0])
 
             #taduzione dei simboli in valori per la difesa
+            if difesa == "1":
+                difesa = 10
             if difesa.isalpha():
                 if difesa == "A":
                     difesa = 1
@@ -71,8 +73,7 @@ class Player:
                     difesa = 15
                 elif difesa == "K":
                     difesa = 20 
-            if difesa == "1":
-                difesa = 10
+                    
             danno -= int(difesa) #calcolo effettivo
         if danno > 0: #verifica se è riuscito a difendere
             return False #morto
