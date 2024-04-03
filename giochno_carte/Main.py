@@ -9,26 +9,26 @@ from Enemy import *
 
 def effetti(att):
     # effetti cuori
-            if att[1] == "cuori":
-                scarti.shuffle()
-                for _ in range(att[0]): #ripeti n volte la pesca
-                    if len(scarti.seeDeck()) > 0: #non puoi prendere carte da un mazzo vuoto
-                        carta_pescata= scarti.pickCard()[0].split("_")
-                        taverna.addCard(carta_pescata[1],carta_pescata[0])
-                    else:
-                        break
-            
-            # effetti quadri
-            elif att[1] == "quadri":
-                pesca= True
-                count= 0
-                while count < att[0] and pesca:
-                    pesca=False
-                    for i in giocatori: # ogni giocatore pesca
-                        if len(i.seeHand()) < numMaxCarte: # a meno che non sia già full
-                            i.draw(taverna.pickCard())
-                            pesca=True
-                            count+=1
+    if att[1] == "cuori":
+        scarti.shuffle()
+        for _ in range(att[0]): #ripeti n volte la pesca
+            if len(scarti.seeDeck()) > 0: #non puoi prendere carte da un mazzo vuoto
+                carta_pescata= scarti.pickCard()[0].split("_")
+                taverna.addCard(carta_pescata[1],carta_pescata[0])
+            else:
+                break
+    
+    # effetti quadri
+    elif att[1] == "quadri":
+        pesca= True
+        count= 0
+        while count < att[0] and pesca:
+            pesca=False
+            for i in giocatori: # ogni giocatore pesca
+                if len(i.seeHand()) < numMaxCarte: # a meno che non sia già full
+                    i.draw(taverna.pickCard())
+                    pesca=True
+                    count+=1
 
 
 #creo gli scarti
@@ -89,6 +89,7 @@ continua=True
 #ciclo ci gioco
 while re > 0 and continua:
     for giocatore in giocatori:
+        sconfittoNelTurno= False
         print("\n---NUOVO TURNO---")
         print(nemico.getEnemy()[0],nemico.getStats())
         print(giocatore.seeHand())
@@ -100,7 +101,7 @@ while re > 0 and continua:
             #scegli la carta e attacca
             card= giocatore.selectCard(input("scegli una carta: "))
             if card[0]=="A":
-                #chiedi per rinuncia
+                #chiedi per giocare un altra carta
                 seconda_carta= input("vuoi giocare un altra carta? (s/n): ")
                 if seconda_carta == "" or seconda_carta[0].lower() == "s":
                     second_card= giocatore.selectCard(input("scegli una altra carta: "))
@@ -111,19 +112,21 @@ while re > 0 and continua:
             elif card[0]:
                 pass
 
+            # attacco
             attacco= giocatore.calcolo(card, nemico)
-
             effetti(attacco)
 
             #ogni volta che un re cade, il contatore scala di 1
             if nemico.subisciDanno(attacco[0]): #verifica morte
+                sconfittoNelTurno = True
                 if nemico.getStats()["attack"]==20:
                     re-= 1
                 nemico.addStats(castello.pickCard())
                 for i in giocatori:
                     i.defenceReset()
-
-        continua= giocatore.subisciDanno(nemico.getStats()["attack"])
+    
+        if sconfittoNelTurno == False:
+            continua= giocatore.subisciDanno(nemico.getStats()["attack"])
         if continua == False: #morte
             print("sei morto skill issue")
             break
