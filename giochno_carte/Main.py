@@ -112,7 +112,10 @@ while re > 0 and continua:
             effetti(attacco)
 
             #ogni volta che un re cade, il contatore scala di 1
-            if nemico.subisciDanno(attacco[0]): #verifica morte
+            idk=nemico.subisciDanno(attacco[0])
+            if idk[0]==True: #verifica morte
+                if idk[1]==True:
+                    taverna.addCard(nemico.getStats()["attack"],nemico.getStats()["seme"])
                 sconfittoNelTurno = True
                 if nemico.getStats()["attack"]==20:
                     re-= 1

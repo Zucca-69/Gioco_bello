@@ -22,9 +22,12 @@ class Enemy:
     #todo add conquistato -> return tuple (sconfitto(bool) , conquistato(bool))
     def subisciDanno(self, danno):
         self.__health -= int(danno)
-        if self.__health <= 0:
-            return True
-        return False
+        if self.__health == 0:
+            return (True,True)
+        elif self.__health < 0:
+            return (True,False)
+        else:
+            (False,False)
 
     #imposta nuovo seme quando viene giocato il jolly
     def modSeme(self, nuovo_seme):
