@@ -106,7 +106,20 @@ while re > 0 and continua:
                     second_card= giocatore.selectCard(input("scegli una altra carta: "))
                     second_attack=giocatore.calcolo(second_card, nemico)
                     effetti(second_attack)
-
+            else:
+                try:
+                    if int(card[0]) <= 5: #and hai in mano altre carte che iniziano con quel numero? 
+                        somma=int(card[0])
+                        while somma + int(card[0]) <=10: #and stessa cosa di prima
+                            #chiedi per giocare un altra carta
+                            seconda_carta= input("vuoi giocare un altra carta? (s/n): ")
+                            if seconda_carta == "" or seconda_carta[0].lower() == "s":
+                                second_card= giocatore.selectCard(input("scegli una altra carta: "))
+                                second_attack=giocatore.calcolo(second_card, nemico)
+                                effetti(second_attack)
+                except ValueError("Invalid card") as e:
+                    print(e)
+                    
             # attacco
             attacco= giocatore.calcolo(card, nemico)
             effetti(attacco)

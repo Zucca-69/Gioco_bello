@@ -19,15 +19,15 @@ class Enemy:
             self.__attack=10
         self.__seme= card[1]
 
-    #todo add conquistato -> return tuple (sconfitto(bool) , conquistato(bool))
+    # return list [sconfitto(bool), conquistato(bool)]
     def subisciDanno(self, danno):
         self.__health -= int(danno)
+        ret= [False, False]
+        if self.__health <= 0: 
+            ret[0] = True # ucciso
         if self.__health == 0:
-            return (True,True)
-        elif self.__health < 0:
-            return (True,False)
-        else:
-            (False,False)
+            ret[1] = True # conquistato
+        return ret
 
     #imposta nuovo seme quando viene giocato il jolly
     def modSeme(self, nuovo_seme):
