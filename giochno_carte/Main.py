@@ -96,18 +96,23 @@ while re > 0 and continua:
         #chiedi per rinuncia
         rinuncia= input("vuoi rinunciare? (s/n): ")
         if rinuncia == "" or rinuncia[0].lower() != "s":
+            lista_giocate = []
+            tot = 0
 
             #scegli la carta e attacca
             card= giocatore.selectCard(input("scegli una carta: "))
+            lista_giocate.append(card)
+
             if card[0]=="A":
                 #chiedi per rinuncia
-                seconda_carta= input("vuoi giocare un altra carta? (s/n): ")
+                card = input("vuoi giocare un altra carta? (s/n): ")
                 print(giocatore.seeHand())
-                if seconda_carta == "" or seconda_carta[0].lower() == "s":
-                    second_card= giocatore.selectCard(input("scegli una altra carta: "))
-                    second_attack= giocatore.calcolo(second_card, nemico)
-                    effetti(second_attack)
+                if card == "" or card[0].lower() == "s":
+                    card= giocatore.selectCard(input("scegli una altra carta: "))
+                    lista_giocate.append(card)
                     
+            # int(card[0]) >= 2 and int(card[0]) <= 5
+                                        
             # TODO: mettere le più carte giocabili qui
             elif card[0]:
                 pass
@@ -116,9 +121,6 @@ while re > 0 and continua:
 
             effetti(attacco)
 
-            #ogni volta che un re cade, il contatore scala di 1
-            if nemico.subisciDanno(attacco[0]): #verifica morte
-                if nemico.getStats()["attack"]==20:
             risultatoAttacco = nemico.subisciDanno(attacco[0])
             # se il nemico viene sconfitto nemico sconfitto
             if  risultatoAttacco[0] == True: 

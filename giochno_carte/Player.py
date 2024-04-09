@@ -60,7 +60,12 @@ class Player:
         while danno > 0 and len(self.__hand) > 0: # ciclo per la difesa
             print(f"\ndanno da difendere: {danno}")
             print(self.seeHand())
-            difesa = self.selectCard(input("scegli una carta per difenderti: ")[0])
+            difesa = input("scegli una carta per difenderti: ")
+            validità_difesa = self.selectCard(difesa)
+            if validità_difesa != False:
+                difesa = difesa[0]
+            else:
+                return False
 
             #taduzione dei simboli in valori per la difesa
             if difesa == "1":
