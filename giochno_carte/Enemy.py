@@ -1,10 +1,11 @@
 class Enemy:
 
     def __init__(self):
-        self.__card= None
+        self.__card= None # tuple(segno_seme, seme) es("J_cuori", "cuori")
         self.__health= 0
         self.__attack= 0
         self.__seme= None
+        self.__carta= None 
 
     def addStats(self, card):
         self.__card= card
@@ -19,12 +20,15 @@ class Enemy:
             self.__attack=10
         self.__seme= card[1]
 
-    #todo add conquistato -> return tuple (sconfitto(bool) , conquistato(bool))
+    # return list [sconfitto(bool), conquistato(bool)]
     def subisciDanno(self, danno):
         self.__health -= int(danno)
-        if self.__health <= 0:
-            return True
-        return False
+        ret= [False, False]
+        if self.__health <= 0: 
+            ret[0] = True # ucciso
+        if self.__health == 0:
+            ret[1] = True # conquistato
+        return ret
 
     #imposta nuovo seme quando viene giocato il jolly
     def modSeme(self, nuovo_seme):
@@ -33,5 +37,5 @@ class Enemy:
     def getStats(self): #ritorna le stat del nemico
         return {"health" : self.__health, "attack" : self.__attack, "seme" : self.__seme}
 
-    def getEnemy(self):
+    def getEnemyCard(self):
         return self.__card
