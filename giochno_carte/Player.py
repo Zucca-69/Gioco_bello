@@ -37,22 +37,14 @@ class Player:
             damage= 0
         else:
             damage= int(card_values[0])
-        stato= None
 
         #attivazione effetti
         if card_values[1] != enemy.getStats()["seme"]:
-            if card_values[1] == "cuori":
+            if card_values :
                 stato="cuori"
             elif card_values[1] == "quadri":
                 stato="quadri"
-            elif card_values[1] == "picche":
-                self.__defence += damage
-            elif card_values[1] == "fiori":
-                damage= damage * 2
-            #effetto del Jolly
-            elif card_values[1] == None:
-                enemy.modSeme(None)
-        return damage,stato
+        return damage,effetti
     
     def subisciDanno(self,danno): # attacco del nemico
         danno=danno-self.__defence

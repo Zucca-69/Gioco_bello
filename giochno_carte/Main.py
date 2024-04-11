@@ -5,9 +5,10 @@ from Mazzo import *
 from Player import *
 from Enemy import *
 
-###################################################
-#toto: add conquista dei nemici se portati a 0 hp #
-###################################################
+#########################################################################
+# toto: add conquista dei nemici se portati a 0 hp                      #
+# todo: correggi calcolo -> effetti card_values[1] con Jolly non esiste #
+#########################################################################
 
 def effetti(att):
     # effetti cuori
