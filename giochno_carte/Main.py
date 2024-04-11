@@ -10,25 +10,25 @@ from Enemy import *
 class Game:
     def __init__(self,id) -> None:
         self.id=id
+        self.__scarti=Mazzo()
+        self.__castello=Mazzo()
+        self.__taverna=Mazzo()
 
-
-    #creo gli scarti
-    scarti=Mazzo()
 
     #creo il mazzo nemico
-    castello=Mazzo()
-    for seme in ["picche","fiori","quadri","cuori"]:
-        castello.addCard("K", seme)
-        castello.addCard("J", seme)
-        castello.addCard("Q", seme)
-    castello.shuffle()
+    def makeCastello(self):
+        for seme in ["picche","fiori","quadri","cuori"]:
+            self.__castello.addCard("K", seme)
+            self.__castello.addCard("J", seme)
+            self.__castello.addCard("Q", seme)
+        self.__castello.shuffle()
 
     #creo il mazzo da cui pescare
-    taverna=Mazzo()
-    for seme in ["picche","fiori","quadri","cuori"]:
-        taverna.addCard("A", seme)
-        for numero in range(2,11):
-            taverna.addCard(str(numero), seme)
+    def makeTaverna(self):
+        for seme in ["picche","fiori","quadri","cuori"]:
+            self.__taverna.addCard("A", seme)
+            for numero in range(2,11):
+                self.__taverna.addCard(str(numero), seme)
 
     #creo giocatori
     ferpetti=Player() 
@@ -64,13 +64,13 @@ class Game:
     nemico= Enemy()
     nemico.addStats(castello.pickCard())
 
-    def effetti(att):
+    def effetti(self,att):
         # effetti cuori
         if att[1] == "cuori":
-            scarti.shuffle()
+            self.__scarti.shuffle()
             for _ in range(att[0]): #ripeti n volte la pesca
-                if len(scarti.seeDeck()) > 0: #non puoi prendere carte da un mazzo vuoto
-                    carta_pescata= scarti.pickCard()[0].split("_")
+                if len(self.__scarti.seeDeck()) > 0: #non puoi prendere carte da un mazzo vuoto
+                    carta_pescata= self.__scarti.pickCard()[0].split("_")
                     taverna.addCard(carta_pescata[1],carta_pescata[0])
                 else:
                     break
