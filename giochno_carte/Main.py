@@ -1,3 +1,5 @@
+import tkinter as tk
+
 from Mazzo import *
 from Player import *
 from Enemy import *
@@ -92,6 +94,7 @@ while re > 0 and continua:
         print("\n---NUOVO TURNO---")
         print(nemico.getEnemyCard()[0],nemico.getStats())
         print(giocatore.seeHand())
+        animale = True
 
         #chiedi per rinuncia
         rinuncia= input("vuoi rinunciare? (s/n): ")
@@ -99,19 +102,36 @@ while re > 0 and continua:
             lista_giocate = []
             tot = 0
 
-            #scegli la carta e attacca
+            #scegli la carta
             card= giocatore.selectCard(input("scegli una carta: "))
             lista_giocate.append(card)
-
-            if card[0]=="A":
+            
+            if card[0]=="A" and animale:
                 #chiedi per rinuncia
                 card = input("vuoi giocare un altra carta? (s/n): ")
                 print(giocatore.seeHand())
                 if card == "" or card[0].lower() == "s":
+                    animale = False
                     card= giocatore.selectCard(input("scegli una altra carta: "))
-                    lista_giocate.append(card)
+                    lista_giocate.append(card)                    
+
+            #gioca carte con lo stesso simbolo
+            if int(card[0]) >= 2 and int(card[0]) <= 5:
+                giocabili = []
+                for carta in giocatore.seeHand():
+                    if carta[0] == str(card[0]):
+                        giocabili.append(carta)
+                
+                while tot + int(card[0]) <= 10 and len(giocabili) > 0:
+                    print(giocabili)
+                    #chiedi per rinuncia
+                    rinuncia= input("vuoi rinunciare? (s/n): ")
+                    if rinuncia == "" or rinuncia[0].lower() != "s":
+                        card= giocatore.selectCard(input("scegli una carta: "))
+                        lista_giocate.append(card)
+                        giocabili.remove(card)
+                        tot += int(card[0])
                     
-            # int(card[0]) >= 2 and int(card[0]) <= 5
                                         
             # TODO: mettere le più carte giocabili qui
             elif card[0]:
