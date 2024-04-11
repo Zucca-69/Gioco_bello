@@ -137,6 +137,7 @@ while re > 0 and continua:
             elif card[0]:
                 pass
 
+
             attacco= giocatore.calcolo(card, nemico)
 
             effetti(attacco)
@@ -144,6 +145,7 @@ while re > 0 and continua:
             risultatoAttacco = nemico.subisciDanno(attacco[0])
             # se il nemico viene sconfitto nemico sconfitto
             if  risultatoAttacco[0] == True: 
+
                 sconfittoNelTurno = True
                 print("nemico sconfitto")
                 # conquistato (?)  
