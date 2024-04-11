@@ -1,10 +1,11 @@
 class Enemy:
 
     def __init__(self):
-        self.__card= None
+        self.__card= None # tuple(segno_seme, seme) es("J_cuori", "cuori")
         self.__health= 0
         self.__attack= 0
         self.__seme= None
+        self.__carta= None 
 
     def addStats(self, card):
         self.__card= card
@@ -36,5 +37,5 @@ class Enemy:
     def getStats(self): #ritorna le stat del nemico
         return {"health" : self.__health, "attack" : self.__attack, "seme" : self.__seme}
 
-    def getEnemy(self):
+    def getEnemyCard(self):
         return self.__card
