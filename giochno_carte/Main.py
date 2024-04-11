@@ -1,11 +1,11 @@
 import tkinter as tk
+from MainWindow import *
 
 from Mazzo import *
 from Player import *
 from Enemy import *
 
 ###################################################
-#todo: add più carte giocabili (asso,combinazioni)#
 #toto: add conquista dei nemici se portati a 0 hp #
 ###################################################
 
@@ -84,7 +84,12 @@ for _ in range(numMaxCarte):
 #creo e pesco nemico
 nemico= Enemy()
 nemico.addStats(castello.pickCard())
-
+'''
+#schermata
+root = MainWindow(giocatori)
+for giocatore in giocatori:
+    root.schermata_player(giocatore)
+'''
 #condizioni di gioco
 re= 4
 continua=True
@@ -162,3 +167,5 @@ while re > 0 and continua:
         if continua == False: #morte
             print("sei morto skill issue")
             break
+        
+# root.mainloop()
