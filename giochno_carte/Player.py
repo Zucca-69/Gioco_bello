@@ -26,25 +26,44 @@ class Player:
     def setMaxCarte(self, maxCarte):
         self.__numMaxCarte= maxCarte
 
-    #card : list of played card(dictionary)
-    def calcolo(self, card, enemy):
-        #calcolo -> danno + effetti (se attivi)
-        #conteggio danno
-        card_values= card.split("_")
-        if card_values[0] == "A":
-            damage= 1 
-        elif card_values[0] == "Jolly":
-            damage= 0
-        else:
-            damage= int(card_values[0])
+    def __traduci_simbolo(self, simbolo):
+        #taduzione dei simboli in valori interi
+        if difesa.isalpha():
+            if simbolo == "A":
+                valore = 1
+            elif simbolo == "J":
+                valore = 10
+            elif simbolo == "Q":
+                valore = 15
+            elif simbolo == "K":
+                valore = 20 
+            elif simbolo == "Jolly":
+                valore = 0
+        else: 
+            valore = int(valore)
+        return valore
 
-        #attivazione effetti
-        if card_values[1] != enemy.getStats()["seme"]:
-            if card_values :
-                stato="cuori"
-            elif card_values[1] == "quadri":
-                stato="quadri"
-        return damage,effetti
+    #card : list of played card(dictionary)
+    def calcolo(self, lista_carte, enemy):
+        #calcolo -> danno + effetti (se attivi)
+        
+        danno = 0
+        effetti = []
+
+        for pos_carta in range(len(lista_carte)):
+            carta = lista_carte[pos_carta].split("_")
+            # calcolo totale
+            danno += self.__traduci_simbolo(carta[0])
+
+
+            # effetti
+            if len(carta) == 1: # jolly
+                enemy.modSeme(None)
+            elif len(carta) == 2: # carta normale
+                if carta[1] not in effetti:
+                    effetti.append(carta[1])
+
+        return damage, effetti
     
     def subisciDanno(self,danno): # attacco del nemico
         danno=danno-self.__defence
@@ -55,24 +74,11 @@ class Player:
             difesa = input("scegli una carta per difenderti: ")
             validità_difesa = self.selectCard(difesa)
             if validità_difesa != False:
-                difesa = difesa[0]
-            else:
-                return False
-
-            #taduzione dei simboli in valori per la difesa
-            if difesa == "1":
-                difesa = 10
-            elif difesa.isalpha():
-                if difesa == "A":
-                    difesa = 1
-                elif difesa == "J":
-                    difesa = 10
-                elif difesa == "Q":
-                    difesa = 15
-                elif difesa == "K":
-                    difesa = 20 
-                    
-            danno -= int(difesa) #calcolo effettivo
+                difesa = self.__traduci_simbolo()
+                danno -= difesa #calcolo effettivo
+            else: 
+                print("input non vaolido\n")
+    
         if danno > 0: #verifica se è riuscito a difendere
             return False #morto
         return True #si continua

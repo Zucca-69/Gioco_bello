@@ -6,6 +6,7 @@ class Enemy:
         self.__attack= 0
         self.__seme= None
         self.__carta= None 
+        self.__semeOriginale = None
 
     def addStats(self, card):
         self.__card= card
@@ -19,13 +20,16 @@ class Enemy:
             self.__health=20
             self.__attack=10
         self.__seme= card[1]
+        self.__semeOriginale = card[1]
 
     # return list [sconfitto(bool), conquistato(bool)]
     def subisciDanno(self, danno):
         self.__health -= int(danno)
         ret= [False, False]
+        #non toccare if o <= , c'è il motivo, leggi
         if self.__health <= 0: 
             ret[0] = True # ucciso
+            self.__seme = self.__semeOriginale #nel caso abbia usato un jolly, ripristino il seme
         if self.__health == 0:
             ret[1] = True # conquistato
         return ret
