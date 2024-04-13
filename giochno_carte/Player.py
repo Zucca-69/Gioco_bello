@@ -28,7 +28,7 @@ class Player:
 
     def __traduci_simbolo(self, simbolo):
         #taduzione dei simboli in valori interi
-        if difesa.isalpha():
+        if simbolo.isalpha():
             if simbolo == "A":
                 valore = 1
             elif simbolo == "J":
@@ -63,7 +63,7 @@ class Player:
                 if carta[1] not in effetti:
                     effetti.append(carta[1])
 
-        return damage, effetti
+        return danno, effetti
     
     def subisciDanno(self,danno): # attacco del nemico
         danno=danno-self.__defence

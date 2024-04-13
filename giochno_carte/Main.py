@@ -5,10 +5,9 @@ from Mazzo import *
 from Player import *
 from Enemy import *
 
-#########################################################################
-# toto: add conquista dei nemici se portati a 0 hp                      #
-# todo: correggi calcolo -> effetti card_values[1] con Jolly non esiste #
-#########################################################################
+####################################################
+# toto: add CONQUISTA dei nemici se portati a 0 hp #
+####################################################
 
 def effetti(att):
     # effetti cuori
@@ -137,12 +136,8 @@ while re > 0 and continua:
                         lista_giocate.append(card)
                         giocabili.remove(card)
                         tot += int(card[0])
-                    
-                                        
-            # TODO: mettere le più carte giocabili qui
-            elif card[0]:
-                pass
 
+            # TODO: correggi il subire il danno al nemico
             attacco= giocatore.calcolo(card, nemico)
 
             effetti(attacco)
