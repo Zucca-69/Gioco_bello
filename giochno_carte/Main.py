@@ -1,88 +1,9 @@
-from network import Network
-from Mazzo import *
-from Player import *
-from Enemy import *
-
-###################################################
-#todo: add più carte giocabili (asso,combinazioni)#
-#toto: add conquista dei nemici se portati a 0 hp #
-###################################################
 class Game:
-    def __init__(self,id) -> None:
-        self.id=id
-        self.__scarti=Mazzo()
-        self.__castello=Mazzo()
-        self.__taverna=Mazzo()
-
-
-    #creo il mazzo nemico
-    def makeCastello(self):
-        for seme in ["picche","fiori","quadri","cuori"]:
-            self.__castello.addCard("K", seme)
-            self.__castello.addCard("J", seme)
-            self.__castello.addCard("Q", seme)
-        self.__castello.shuffle()
-
-    #creo il mazzo da cui pescare
-    def makeTaverna(self):
-        for seme in ["picche","fiori","quadri","cuori"]:
-            self.__taverna.addCard("A", seme)
-            for numero in range(2,11):
-                self.__taverna.addCard(str(numero), seme)
-
-    #creo giocatori
-    ferpetti=Player() 
-    # zucchetto= Player()
-    # Pagliaccio= Player()
-    giocatori= [ferpetti]#, zucchetto, Pagliaccio]
-
-    numGiocatori= len(giocatori)
-    # idCount del server
-    # impostare il limite giocatori da 1 a 4
-
-    #imposto i jolly e il num massimo di carte per giocatore in base al num giocatori
-    numMaxCarte= 8
-    while numGiocatori > 1:
-        numGiocatori-= 1
-        numMaxCarte-= 1
-        if numGiocatori > 2: 
-            taverna.addCard("Jolly")
-
-    #lo shuffle va fatto dopo l'aggiunta di eventuali Jolly
-    taverna.shuffle() 
-
-    #imposto maxcarte ai giocatori
-    for giocatore in giocatori:
-        giocatore.setMaxCarte(numMaxCarte)
-
-    #ogni giocatore pesca
-    for _ in range(numMaxCarte):
-        for i in giocatori:
-            i.draw(taverna.pickCard())
-
-    #creo e pesco nemico
-    nemico= Enemy()
-    nemico.addStats(castello.pickCard())
-
-    def effetti(self,att):
-        # effetti cuori
-        if att[1] == "cuori":
-            self.__scarti.shuffle()
-            for _ in range(att[0]): #ripeti n volte la pesca
-                if len(self.__scarti.seeDeck()) > 0: #non puoi prendere carte da un mazzo vuoto
-                    carta_pescata= self.__scarti.pickCard()[0].split("_")
-                    taverna.addCard(carta_pescata[1],carta_pescata[0])
-                else:
-                    break
+    def __init__(self, id):
+        self.ready = False
+        self.id = id
         
-        # effetti quadri
-        elif att[1] == "quadri":
-            pesca= True
-            count= 0
-            while count < att[0] and pesca:
-                pesca=False
-                for i in giocatori: # ogni giocatore pesca
-                    if len(i.seeHand()) < numMaxCarte: # a meno che non sia già full
-                        i.draw(taverna.pickCard())
-                        pesca=True
-                        count+=1
+
+    def connected(self):
+        return self.ready
+    
