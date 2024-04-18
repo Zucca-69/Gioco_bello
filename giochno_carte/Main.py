@@ -143,6 +143,7 @@ while re > 0 and continua:
 
             # se il nemico viene sconfitto nemico sconfitto
             if  risultatoAttacco[0] == True: 
+
                 sconfittoNelTurno = True
                 print("nemico sconfitto")
                 # conquistato (?)  
