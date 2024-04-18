@@ -12,27 +12,26 @@ from Enemy import *
 
 def effetti(att):
     # effetti cuori
-            if att[1] == "cuori":
-                scarti.shuffle()
-                for _ in range(att[0]): #ripeti n volte la pesca
-                    if len(scarti.seeDeck()) > 0: #non puoi prendere carte da un mazzo vuoto
-                        carta_pescata= scarti.pickCard()[0].split("_")
-                        taverna.addCard(carta_pescata[1],carta_pescata[0])
-                    else:
-                        break
-            
-            # effetti quadri
-            elif att[1] == "quadri":
-                pesca= True
-                count= 0
-                while count < att[0] and pesca:
-                    pesca=False
-                    for i in giocatori: # ogni giocatore pesca
-                        if len(i.seeHand()) < numMaxCarte: # a meno che non sia già full
-                            i.draw(taverna.pickCard())
-                            pesca=True
-                            count+=1
-
+    if att[1] == "cuori":
+        scarti.shuffle()
+        for _ in range(att[0]): #ripeti n volte la pesca
+            if len(scarti.seeDeck()) > 0: #non puoi prendere carte da un mazzo vuoto
+                carta_pescata= scarti.pickCard()[0].split("_")
+                taverna.addCard(carta_pescata[1],carta_pescata[0])
+            else:
+                break
+    
+    # effetti quadri
+    elif att[1] == "quadri":
+        pesca= True
+        count= 0
+        while count < att[0] and pesca:
+            pesca=False
+            for i in giocatori: # ogni giocatore pesca
+                if len(i.seeHand()) < numMaxCarte: # a meno che non sia già full
+                    i.draw(taverna.pickCard())
+                    pesca=True
+                    count+=1
 
 #creo gli scarti
 scarti=Mazzo()
@@ -47,28 +46,31 @@ castello.shuffle()
 
 #creo il mazzo da cui pescare
 taverna=Mazzo()
-for seme in ["picche","fiori","quadri","cuori"]:
+for seme in ["picche","cuori"]: #,"fiori","quadri"]:
     taverna.addCard("A", seme)
     for numero in range(2,11):
         taverna.addCard(str(numero), seme)
 
 #creo giocatori
 ferpetti=Player() 
-# zucchetto= Player()
-# Pagliaccio= Player()
-giocatori= [ferpetti]#, zucchetto, Pagliaccio]
+zucchetto= Player()
+pagliaccio= Player()
+moketto = Player()
+giocatori= [ferpetti, zucchetto, pagliaccio, moketto]
 
 numGiocatori= len(giocatori)
 # idCount del server
 # impostare il limite giocatori da 1 a 4
-
 #imposto i jolly e il num massimo di carte per giocatore in base al num giocatori
 numMaxCarte= 8
 while numGiocatori > 1:
+    if numGiocatori > 2: 
+        i = 0
+        taverna.addCard(f"Jolly{i}")
+        i += 1
     numGiocatori-= 1
     numMaxCarte-= 1
-    if numGiocatori > 2: 
-        taverna.addCard("Jolly")
+
 
 #lo shuffle va fatto dopo l'aggiunta di eventuali Jolly
 taverna.shuffle() 
@@ -94,6 +96,7 @@ for giocatore in giocatori:
 #condizioni di gioco
 re= 4
 continua=True
+
 #ciclo ci gioco
 while re > 0 and continua:
     for giocatore in giocatori:
@@ -121,31 +124,25 @@ while re > 0 and continua:
                     card= giocatore.selectCard(input("scegli una altra carta: "))
                     lista_giocate.append(card)                    
 
-            #gioca carte con lo stesso simbolo
-            if int(card[0]) >= 2 and int(card[0]) <= 5:
-                giocabili = []
-                for carta in giocatore.seeHand():
-                    if carta[0] == str(card[0]):
-                        giocabili.append(carta)
-                
-                while tot + int(card[0]) <= 10 and len(giocabili) > 0:
-                    print(giocabili)
-                    #chiedi per rinuncia
-                    rinuncia= input("vuoi rinunciare? (s/n): ")
-                    if rinuncia == "" or rinuncia[0].lower() != "s":
-                        card= giocatore.selectCard(input("scegli una carta: "))
-                        lista_giocate.append(card)
-                        giocabili.remove(card)
-                        tot += int(card[0])
+            if str(card[0]).isdigit() == True: # se una carta normale
+                #gioca carte con lo stesso simbolo
+                if int(card[0]) >= 2 and int(card[0]) <= 5:
+                    giocabili = []
+                    for carta in giocatore.seeHand():
+                        if carta[0] == str(card[0]):
+                            giocabili.append(carta)
                     
-                                        
-            # TODO: mettere le più carte giocabili qui
-            elif card[0]:
-                pass
-
-            attacco= giocatore.calcolo(card, nemico)
-
-            effetti(attacco)
+                    while tot + int(card[0]) <= 10 and len(giocabili) > 0:
+                        print(giocabili)
+                        #chiedi per rinuncia
+                        rinuncia= input("vuoi rinunciare? (s/n): ")
+                        if rinuncia == "" or rinuncia[0].lower() != "s":
+                            card= giocatore.selectCard(input("scegli una carta: "))
+                            lista_giocate.append(card)
+                            giocabili.remove(card)
+                            tot += int(card[0])
+            
+            attacco = giocatore.calcolo(lista_giocate, nemico)
 
             risultatoAttacco = nemico.subisciDanno(attacco[0])
             # se il nemico viene sconfitto nemico sconfitto

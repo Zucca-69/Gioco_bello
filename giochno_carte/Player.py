@@ -2,6 +2,7 @@ class Player:
     def __init__(self, numMaxCarte=0):
         self.__hand= []
         self.__defence= 0
+        self.__immunità = False
         self.__numMaxCarte= numMaxCarte
 
     def draw(self, card):
@@ -28,20 +29,20 @@ class Player:
 
     def __traduci_simbolo(self, simbolo):
         #taduzione dei simboli in valori interi
-        if difesa.isalpha():
+        if simbolo.isalnum():
             if simbolo == "A":
-                valore = 1
+                simbolo = 1
             elif simbolo == "J":
-                valore = 10
+                simbolo = 10
             elif simbolo == "Q":
-                valore = 15
+                simbolo = 15
             elif simbolo == "K":
-                valore = 20 
-            elif simbolo == "Jolly":
-                valore = 0
+                simbolo = 20 
+            elif simbolo[:5] == "Jolly":
+                simbolo = 0
         else: 
-            valore = int(valore)
-        return valore
+            simbolo = int(simbolo)
+        return simbolo
 
     #card : list of played card(dictionary)
     def calcolo(self, lista_carte, enemy):
@@ -53,28 +54,40 @@ class Player:
         for pos_carta in range(len(lista_carte)):
             carta = lista_carte[pos_carta].split("_")
             # calcolo totale
-            danno += self.__traduci_simbolo(carta[0])
-
+            danno += self.__traduci_simbolo(str(carta[0]))
 
             # effetti
-            if len(carta) == 1: # jolly
-                enemy.modSeme(None)
-            elif len(carta) == 2: # carta normale
-                if carta[1] not in effetti:
-                    effetti.append(carta[1])
+            if carta[1] != enemy.getStats()["seme"] and carta[1] not in effetti:
+                effetti.append(carta[1])
 
-        return damage, effetti
+        # applico effetti personali
+        if "fiori" in effetti:
+            danno = danno * 2
+        if "picche" in effetti:
+            self.__defence += danno
+        if "None" in effetti:
+            enemy.modSeme(None)
+            self.__immunità = True
+
+        return danno, effetti
     
     def subisciDanno(self,danno): # attacco del nemico
-        danno=danno-self.__defence
+        danno = danno - self.__defence
 
+        # a seguito di un jolly        
+        if self.__immunità == True:
+            danno = 0
+
+        # ciclo per la difesa 
         while danno > 0 and len(self.__hand) > 0: # ciclo per la difesa
             print(f"\ndanno da difendere: {danno}")
             print(self.seeHand())
             difesa = input("scegli una carta per difenderti: ")
             validità_difesa = self.selectCard(difesa)
+            
             if validità_difesa != False:
-                difesa = self.__traduci_simbolo()
+                difesa = difesa.split("_")
+                difesa = self.__traduci_simbolo(str(difesa[0]))
                 danno -= difesa #calcolo effettivo
             else: 
                 print("input non vaolido\n")
@@ -82,6 +95,6 @@ class Player:
         if danno > 0: #verifica se è riuscito a difendere
             return False #morto
         return True #si continua
-    
+        
     def defenceReset(self):
         self.__defence= 0
