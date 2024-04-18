@@ -5,10 +5,6 @@ from Mazzo import *
 from Player import *
 from Enemy import *
 
-####################################################
-# toto: add CONQUISTA dei nemici se portati a 0 hp #
-####################################################
-
 def effetti(att):
     # effetti cuori
     if att[1] == "cuori":
@@ -140,10 +136,11 @@ while re > 0 and continua:
                             lista_giocate.append(card)
                             giocabili.remove(card)
                             tot += int(card[0])
-            
-            attacco = giocatore.calcolo(lista_giocate, nemico)
 
+            # attacco al nemico
+            attacco = giocatore.calcolo(lista_giocate, nemico)
             risultatoAttacco = nemico.subisciDanno(attacco[0])
+
             # se il nemico viene sconfitto nemico sconfitto
             if  risultatoAttacco[0] == True: 
                 sconfittoNelTurno = True
@@ -160,6 +157,7 @@ while re > 0 and continua:
                 for i in giocatori: 
                     i.defenceReset()
 
+        # il nemico attacca e si verifica se il gioco continua (giocatore ancora vivo)
         continua= giocatore.subisciDanno(nemico.getStats()["attack"])
         if continua == False: #morte
             print("sei morto skill issue")
