@@ -110,7 +110,7 @@ while re > 0 and continua:
             card= giocatore.selectCard(input("scegli una carta: "))
             lista_giocate.append(card)
             
-            if card[0]=="A" and animale:
+            if card[0]=="A" and animale: # se la prima carta è un animale
                 #chiedi per rinuncia
                 card = input("vuoi giocare un altra carta? (s/n): ")
                 print(giocatore.seeHand())
@@ -119,7 +119,7 @@ while re > 0 and continua:
                     card= giocatore.selectCard(input("scegli una altra carta: "))
                     lista_giocate.append(card)                    
 
-            if str(card[0]).isdigit() == True: # se una carta normale
+            elif str(card[0]).isdigit() == True: # se la prima carta è normale
                 #gioca carte con lo stesso simbolo
                 if int(card[0]) >= 2 and int(card[0]) <= 5:
                     giocabili = []
