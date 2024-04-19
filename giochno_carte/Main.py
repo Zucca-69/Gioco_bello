@@ -1,5 +1,4 @@
-import tkinter as tk
-from MainWindow import *
+# import tkinter as tk
 
 from Mazzo import *
 from Player import *
@@ -41,7 +40,7 @@ castello.shuffle()
 
 #creo il mazzo da cui pescare
 taverna=Mazzo()
-for seme in ["picche","cuori"]: #,"fiori","quadri"]:
+for seme in ["picche","cuori","fiori","quadri"]:
     taverna.addCard("A", seme)
     for numero in range(2,11):
         taverna.addCard(str(numero), seme)
@@ -65,7 +64,6 @@ while numGiocatori > 1:
         i += 1
     numGiocatori-= 1
     numMaxCarte-= 1
-
 
 #lo shuffle va fatto dopo l'aggiunta di eventuali Jolly
 taverna.shuffle() 
@@ -99,6 +97,7 @@ while re > 0 and continua:
         print(nemico.getEnemyCard()[0],nemico.getStats())
         print(giocatore.seeHand())
         animale = True
+        sconfittoNelTurno = False
 
         #chiedi per rinuncia
         rinuncia= input("vuoi rinunciare? (s/n): ")
@@ -110,11 +109,11 @@ while re > 0 and continua:
             card= giocatore.selectCard(input("scegli una carta: "))
             lista_giocate.append(card)
             
-            if card[0]=="A" and animale: # se la prima carta è un animale
+            if card[0]=="A" and animale and len(giocatore.seeHand()) > 0: # se la prima carta è un animale
                 #chiedi per rinuncia
                 card = input("vuoi giocare un altra carta? (s/n): ")
                 print(giocatore.seeHand())
-                if card == "" or card[0].lower() == "s":
+                if card == "" or card[0].lower() != "n":
                     animale = False
                     card= giocatore.selectCard(input("scegli una altra carta: "))
                     lista_giocate.append(card)                    
@@ -158,10 +157,11 @@ while re > 0 and continua:
                 for i in giocatori: 
                     i.defenceReset()
 
-        # il nemico attacca e si verifica se il gioco continua (giocatore ancora vivo)
-        continua= giocatore.subisciDanno(nemico.getStats()["attack"])
-        if continua == False: #morte
-            print("sei morto skill issue")
-            break
-        
+        if sconfittoNelTurno == False:
+            # il nemico attacca e si verifica se il gioco continua (giocatore ancora vivo)
+            continua= giocatore.subisciDanno(nemico.getStats()["attack"])
+            if continua == False: #morte
+                print("sei morto skill issue")
+                break
+
 # root.mainloop()
