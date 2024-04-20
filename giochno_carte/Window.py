@@ -21,12 +21,12 @@ class App(tk.Tk):
                 self.columnconfigure(j, weight=1)  # Imposta il peso della colonn
 
         # widgets
-        self.menu = Menu(self)
+        self.menu = FrameMenu(self)
 
         # run
         self.mainloop()
 
-class Menu(ttk.Frame):
+class FrameMenu(ttk.Frame):
     def __init__(self, master):
         super().__init__(master)
 
@@ -45,14 +45,35 @@ class Menu(ttk.Frame):
         self.entry_nome.pack(side=tk.LEFT, padx= 10)
 
         # bottoni per giocare
+        self.btn_nome = ttk.Button(text = "leggi nome", command= self.mostra_valore)
+        self.btn_nome.pack(side = tk.LEFT, padx= 10, pady= 30)
+        
         self.btn_ricerca = ttk.Button(text="gioca partita locale", command= self.gioca)
-        self.btn_ricerca.pack(padx= 10, pady= 30)
+        self.btn_ricerca.pack(side = tk.LEFT, padx= 10, pady= 30)
+        
+
+
+    def mostra_valore(self):
+        valore_inserito = self.entry_nome.get()
+        print("Valore inserito:", valore_inserito)
 
     def gioca(self):
-        try:
-            subprocess.run(["python", "Main.py"])
-        except FileNotFoundError:
-            print("File non trovato")
+        # inizia il gioco
+        self.__gioco = Game(2) # inserisci num giocatori
+        
+        # Nasconde il frame del menu e mostra il frame del gioco
+        self.pack_forget()
+        print("dio belletti")
+        self.frame_gioco = FrameGioco()
 
-print("dio can")
+class  FrameGioco(ttk.Frame):
+    def __init__(self, master):
+        super().__init__(master)
+
+        print("PORCA MADONNA SI")
+        self.lbl_titolo = ttk.Label(self, text="Schermata Gioco", font=("Arial", 24))
+        self.lbl_titolo.pack(padx=10, pady=10)
+
+# https://stackoverflow.com/questions/7546050/switch-between-two-frames-in-tkinter
+
 App("menu", 4, 5)

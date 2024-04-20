@@ -40,9 +40,7 @@ class Player:
                 simbolo = 20 
             elif simbolo[:5] == "Jolly":
                 simbolo = 0
-        else: 
-            simbolo = int(simbolo)
-        return simbolo
+        return int(simbolo)
 
     #card : list of played card(dictionary)
     def calcolo(self, lista_carte, enemy):
