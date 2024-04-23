@@ -1,7 +1,7 @@
 import socket
 from _thread import *
 import pickle
-from Main import *
+from Game import *
 
 server = "192.168.1.127"
 port = 5555
@@ -19,6 +19,32 @@ print("Waiting for a connection, Server Started")
 connected = set()
 games = {}
 idCount = 0
+
+
+# Codice sul server per gestire i turni dei giocatori
+def main_game_loop():
+    current_player_index = 0
+    while not game_over:
+        current_player = players[current_player_index]
+        # Invia un messaggio al client corrente per indicare il suo turno
+        send_message_to_client(current_player.socket, "È il tuo turno!")
+        # Attendi l'input del giocatore corrente
+        player_input = receive_player_input(current_player.socket)
+        # Esegui l'azione del giocatore e aggiorna lo stato del gioco
+        update_game_state(player_input)
+        # Passa al turno del prossimo giocatore
+        current_player_index = (current_player_index + 1) % len(players)
+
+
+
+# # Ciclo di gioco sul server
+# while game_in_progress:
+#     for client_socket in connected_clients:
+#         message = receive_message(client_socket)
+#         process_message(message)
+#     update_game_state()
+#     send_game_state_to_clients()
+
 
 
 def threaded_client(conn, p, gameId):
@@ -69,7 +95,7 @@ while True:
         games[gameId] = Game(gameId)
         print("Creating a new game...")
     else:
-        games[gameId].ready = True
+        games[gameId].setReady(True)
         p = 1
 
 
