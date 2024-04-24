@@ -97,6 +97,9 @@ class Game:
                             i.draw(self.__taverna.pickCard())
                             pesca=True
                             count+=1
+    
+    def terminaPartita(self):
+        exit()
                         
     def gioco(self):
         #ciclo ci gioco
