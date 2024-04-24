@@ -35,23 +35,21 @@ class FrameMenu(ttk.Frame):
 
         # titolo centrale
         self.lbl_titolo = ttk.Label(self, text="MENU", font=("Arial", 35))
-        self.lbl_titolo.pack(padx = 0, pady = 50)
+        self.lbl_titolo.pack(pady = 50)
 
         # nome giocatore
         self.lbl_nome = ttk.Label(self, text="Nome:", font=("Arial", 18))
-        self.lbl_nome.pack(side=tk.LEFT, padx=10)
+        self.lbl_nome.pack(side=tk.LEFT, padx=10, pady= 10)
 
         self.entry_nome = ttk.Entry(self)
-        self.entry_nome.pack(side=tk.LEFT, padx= 10)
+        self.entry_nome.pack(side=tk.LEFT, padx= 10, pady= 10)
 
         # bottoni per giocare
         self.btn_nome = ttk.Button(text = "leggi nome", command= self.mostra_valore)
-        self.btn_nome.pack(side = tk.LEFT, padx= 10, pady= 30)
+        self.btn_nome.pack(side = tk.BOTTOM, expand = True)
         
         self.btn_ricerca = ttk.Button(text="gioca partita locale", command= self.gioca)
-        self.btn_ricerca.pack(side = tk.LEFT, padx= 10, pady= 30)
-        
-
+        self.btn_ricerca.pack(side = tk.BOTTOM, expand = True)
 
     def mostra_valore(self):
         valore_inserito = self.entry_nome.get()
