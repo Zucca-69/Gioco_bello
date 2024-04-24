@@ -99,7 +99,7 @@ class Game:
                             count+=1
     
     def terminaPartita(self):
-        return 
+        exit()
                         
     def gioco(self):
         #ciclo ci gioco

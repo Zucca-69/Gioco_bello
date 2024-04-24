@@ -144,21 +144,25 @@ class FrameMenu(ttk.Frame):
         valore_inserito = self.entry_nome.get()
         print("Valore inserito:", valore_inserito)
 
-    def gioca(self):
-        # Create the Game and Show Game Frame
-        self.__gioco = Game(2) # inserisci num giocatori
-        self.__frameGioco = FrameGioco(self.master)
-        self.master.frame_gioco = self.__gioco
-        self.master.show_frame(self.__gioco)
+        '''
+        def make_a_suicidal_class():
+        my_suicidal_class = SelfDestruct()
+        for i in range(5):
+            my_suicidal_class.do_stuff()
+        return None'''
 
-        '''# Nasconde il frame del menu e mostra il frame del gioco
-        self.pack_forget()
-        self.frame_gioco = FrameGioco(self.__gioco)'''
-
+    def torna_al_menu(self):
+        # Ask for Confirmation
+        if messagebox.askokcancel("Chiusura", "Vuoi davvero tornare al Menu?"):
+            # Destroy Game Frame and Show Menu Frame
+            self.destroy()
+            self.master.show_frame(self.master.frame_menu)
+'''
 class FrameGioco(ttk.Frame):
-    def __init__(self, master):
+    def __init__(self, master, gioco):
         super().__init__(master)
-
+        self.__gioco = gioco
+        
         # Empty Space to Left
         self.empty_space = tk.Label(self, text="", width=20)
         self.empty_space.pack()
@@ -176,7 +180,8 @@ class FrameGioco(ttk.Frame):
         if messagebox.askokcancel("Chiusura", "Vuoi davvero tornare al Menu?"):
             # Destroy Game Frame and Show Menu Frame
             self.destroy()
-            self.master.show_frame(self.master.frame_menu)
+            self.master.show_frame(self.master.frame_menu) 
+            '''
 
 def main():
     app = App("Menu", 4, 5)
