@@ -1,11 +1,9 @@
 class Enemy:
-
     def __init__(self):
         self.__card= None # tuple(segno_seme, seme) es("J_cuori", "cuori")
         self.__health= 0
         self.__attack= 0
         self.__seme= None
-        self.__carta= None 
         self.__semeOriginale = None
 
     def addStats(self, card):

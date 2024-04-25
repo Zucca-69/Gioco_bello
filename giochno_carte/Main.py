@@ -61,6 +61,7 @@ class Game:
                 i += 1
             numGiocatori-= 1
             self.__numMaxCarte-= 1
+        self.__taverna.shuffle()
             
         #imposto maxcarte ai giocatori
         for giocatore in giocatori:
@@ -97,9 +98,6 @@ class Game:
                             i.draw(self.__taverna.pickCard())
                             pesca=True
                             count+=1
-    
-    def terminaPartita(self):
-        exit()
                         
     def gioco(self):
         #ciclo ci gioco
@@ -185,5 +183,5 @@ class Game:
                     if continua == False: #morte
                         print("sei morto skill issue")
                         break
-                
-# partita = Game(2)
+
+partita = Game(2)
