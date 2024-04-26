@@ -2,86 +2,120 @@ import tkinter as tk
 from PIL import ImageTk, Image
 import os
 
-class FrameGioco():
-    def __init__(self, coordinate_carte):
-        self.__coordinate_carte = coordinate_carte
-        self.__mano = []
+# Load the original image
+current_dir = os.path.dirname(__file__)
+image_path = os.path.join(current_dir, "imm", "OIUGSZ0.jpg")
 
-        # Load the original image
-        self.__current_dir = os.path.dirname(__file__)
-        self.__image_path = os.path.join(self.__current_dir, "imm", "OIUGSZ0.jpg")
+global original_img
+try:
+    original_img = Image.open(image_path)
+except Exception as e:
+    print("Errore durante il caricamento dell'immagine:", e)
 
-        try:
-            self.__original_img = Image.open(self.__image_path)
-        except Exception as e:
-            print("Errore durante il caricamento dell'immagine:", e)
+class GameUI:
+    def __init__(self, master):
+        self.master = master
+        self.master.title("Regicide - partita in corso")
+        self.master.geometry("1000x600")
+        self.master.configure(bg="#106040")
+        self.master.minsize(1000, 700)
+        
+        # Frame per le carte del giocatore
+        self.player_frame = tk.Frame(self.master)
+        self.player_frame.pack(side=tk.BOTTOM)
+        
+        # Frame per la carta al centro del tavolo
+        self.table_frame = tk.Frame(self.master)
+        self.table_frame.pack()
+        
+        # Esempio di carte per il giocatore
+        self.player_cards = ['A_cuori', '2_picche', '3_quadri']
+        
+        # Esempio di carta al tavolo
+        self.table_card = 'J_picche'
 
-        self.__root = tk.Tk()
+        frame_castello = tk.Frame(self.master, width=450, height=300, bg="#106040")
+        frame_castello.pack()
+        frame_castello.place(anchor='center', relx=0.5, rely=0.4)
+        self.show_card(frame_castello, self.table_card)
+        
+        # Mostra le carte del giocatore
+        self.show_player_cards()
 
-        self.__frame_castello = self.create_frame(anchor = 'center', relx=0.5, rely=0.5)
-        self.show_card(self.__frame_castello, "Q_cuori") # nemico.getEnemyCard()[0]
+    def show_player_cards(self):
+        for card in self.player_cards:
+            frame = tk.Frame(self.player_frame)
+            frame.pack(side=tk.LEFT)
+            self.show_card(frame, card)
 
-        self.__player_hand = []
+    def update_player_cards(self, new_cards):
+        # Rimuove le vecchie carte
+        for widget in self.player_frame.winfo_children():
+            widget.destroy()
 
-
-        self.__root.mainloop()
-
-    def richiediMano(self, mano):
-        self.__mano = mano 
-        self.__frame_mano = self.create_frame(anchor= tk.S, relx=0.5, rely=0.8)
-        self.show_hand(self.__player_hand)
-
-    def create_frame(self, anchor, relx, rely):
-        frame = tk.Frame(self.__root, width = 450, height = 300, bg = "#106040")
-        frame.pack()
-        frame.place(anchor = anchor, relx = relx, rely = rely)
-        return frame
+        # Aggiunge le nuove carte
+        self.player_cards = new_cards
+        self.show_player_cards()
 
     def show_card(self, frame, card):
         card_coordinates = coordinate_carte[card.split("_")[1]][card]
-
+        # Define the region you want to display (left, top, right, bottom)
+        # Adjust these values as needed to show the desired part of the image
         left, top = card_coordinates[0], card_coordinates[1]
-        crop_region = (left, top, left + 410, top + 570) # (left, top, right, bottom)
+        carta = (left, top, left + 410, top + 570)
+        crop_region = carta 
 
         try:
-            # crop dell'immagine
+            # Crop the image
             cropped_img = original_img.crop(crop_region)
 
-            # resizing dell'immagine croppata
+            # Resize the cropped image to fit the frame
             cropped_img = cropped_img.resize((142, 200), Image.BICUBIC)
+
+            # Create an object of tkinter ImageTk from the cropped image
             img = ImageTk.PhotoImage(cropped_img)
 
-            # mostro l'immagine tramite una label
+            # Create a Label Widget to display the cropped image
             label = tk.Label(frame, image=img, bd=0)
-            label.image = img 
+            label.image = img  # Save a reference to the image to prevent garbage collection
             label.pack()
         
-            # bind tra click sulla carta e azione
-            label.bind("<Button-1>", lambda event: card_clicked(event, card))
+            # Bind the card click event to a function
+            label.bind("<Button-1>", lambda event: self.card_clicked(event, card))
 
         except Exception as e:
-            print("Errore durante la visualizzazione dell'immagine:", e)    
+            print("Errore durante la visualizzazione dell'immagine:", e)
 
-    def show_hand(self):
-        nCarte = len(self.__player_hand)
-        inizio = [0, 0.5, 0.45, 0.4, 0.35, 0.3, 0.25, 0.2, 0.15][nCarte]
-        
-        # tolgo le carte già presenti
-        for widget in self.__frame_mano.winfo_children():
-            widget.destroy()
-        
-        # carico le nuove carte 
-        for carta in self.__mano:
-            self.show_card(self.__frame_mano, carta)
+    def card_clicked(self, event, card):
+        print("Hai cliccato sulla carta:", card)
+
+    def get_card_image(self, card):
+        # Ottieni le coordinate della carta
+        card_coordinates = coordinate_carte[card.split("_")[1]][card]
+        # Definisci la regione da ritagliare
+        left, top = card_coordinates[0], card_coordinates[1]
+        carta = (left, top, left + 410, top + 570)
+        # Ritaglia l'immagine originale
+        cropped_img = original_img.crop(carta)
+        # Ridimensiona l'immagine
+        cropped_img = cropped_img.resize((142, 200), Image.BICUBIC)
+        # Crea un oggetto ImageTk da mostrare sul pulsante
+        card_img = ImageTk.PhotoImage(cropped_img)
+        return card_img
 
 coordinate_carte = {
-'quadri': {'K_quadri': (90, 545, 486, 1101), 'Q_quadri': (90, 1205, 486, 1761), 'J_quadri': (90, 1865, 486, 2421), '10_quadri': (90, 2525, 486, 3081), '9_quadri': (90, 3185, 486, 3741), '8_quadri': (90, 3845, 486, 4401), '7_quadri': (2520, 545, 2916, 1101), '6_quadri': (2520, 1205, 2916, 1761), '5_quadri': (2520, 1865, 2916, 2421), '4_quadri': (2520, 2525, 2916, 3081), '3_quadri': (2520, 3185, 2916, 3741), '2_quadri': (2520, 3845, 2916, 4401), 'A_quadri': (2043, 2525, 2439, 3081)}, 
-'picche': {'K_picche': (582, 545, 978, 1101), 'Q_picche': (582, 1205, 978, 1761), 'J_picche': (582, 1865, 978, 2421), '10_picche': (582, 2525, 978, 3081), '9_picche': (582, 3185, 978, 3741), '8_picche': (582, 3845, 978, 4401), '7_picche': (3012, 545, 3408, 1101), '6_picche': (3012, 1205, 3408, 1761), '5_picche': (3012, 1865, 3408, 2421), '4_picche': (3012, 2525, 3408, 3081), '3_picche': (3012, 3185, 3408, 3741), '2_picche': (3012, 3845, 3408, 4401), 'A_picche': (2043, 1865, 2439, 2421)}, 
-'cuori': {'K_cuori': (1074, 545, 1470, 1101), 'Q_cuori': (1074, 1205, 1470, 1761), 'J_cuori': (1074, 1865, 1470, 2421), '10_cuori': (1074, 2525, 1470, 3081), '9_cuori': (1074, 3185, 1470, 3741), '8_cuori': (1074, 3845, 1470, 4401), '7_cuori': (3504, 545, 3900, 1101), '6_cuori': (3504, 1205, 3900, 1761), '5_cuori': (3504, 1865, 3900, 2421), '4_cuori': (3504, 2525, 3900, 3081), '3_cuori': (3504, 3185, 3900, 3741), '2_cuori': (3504, 3845, 3900, 4401), 'A_cuori': (2043, 1205, 2439, 1761)}, 
-'fiori': {'K_fiori': (1566, 545, 1962, 1101), 'Q_fiori': (1566, 1205, 1962, 1761), 'J_fiori': (1566, 1865, 1962, 2421), '10_fiori': (1566, 2525, 1962, 3081), '9_fiori': (1566, 3185, 1962, 3741), '8_fiori': (1566, 3845, 1962, 4401), '7_fiori': (3996, 545, 4392, 1101), '6_fiori': (3996, 1205, 4392, 1761), '5_fiori': (3996, 1865, 4392, 2421), '4_fiori': (3996, 2525, 4392, 3081), '3_fiori': (3996, 3185, 4392, 3741), '2_fiori': (3996, 3845, 4392, 4401), 'A_fiori': (2043, 545, 2439, 1101)}, 
-'None': {'Jolly@_None': (2043, 3185, 2439, 3741), 'Back_None': (2043, 3845, 2439, 4401)}}
+    'quadri': {'K_quadri': (90, 545), 'Q_quadri': (90, 1205), 'J_quadri': (90, 1865), '10_quadri': (90, 2525), '9_quadri': (90, 3185), '8_quadri': (90, 3845), '7_quadri': (2520, 545), '6_quadri': (2520, 1205), '5_quadri': (2520, 1865), '4_quadri': (2520, 2525), '3_quadri': (2520, 3185), '2_quadri': (2520, 3845), 'A_quadri': (2043, 2525)}, 
+    'picche': {'K_picche': (582, 545), 'Q_picche': (582, 1205), 'J_picche': (582, 1865), '10_picche': (582, 2525), '9_picche': (582, 3185), '8_picche': (582, 3845), '7_picche': (3012, 545), '6_picche': (3012, 1205), '5_picche': (3012, 1865), '4_picche': (3012, 2525), '3_picche': (3012, 3185), '2_picche': (3012, 3845), 'A_picche': (2043, 1865)}, 
+    'cuori': {'K_cuori': (1074, 545), 'Q_cuori': (1074, 1205), 'J_cuori': (1074, 1865), '10_cuori': (1074, 2525), '9_cuori': (1074, 3185), '8_cuori': (1074, 3845), '7_cuori': (3504, 545), '6_cuori': (3504, 1205), '5_cuori': (3504, 1865), '4_cuori': (3504, 2525), '3_cuori': (3504, 3185), '2_cuori': (3504, 3845), 'A_cuori': (2043, 1205)}, 
+    'fiori': {'K_fiori': (1566, 545), 'Q_fiori': (1566, 1205), 'J_fiori': (1566, 1865), '10_fiori': (1566, 2525), '9_fiori': (1566, 3185), '8_fiori': (1566, 3845), '7_fiori': (3996, 545), '6_fiori': (3996, 1205), '5_fiori': (3996, 1865), '4_fiori': (3996, 2525), '3_fiori': (3996, 3185), '2_fiori': (3996, 3845), 'A_fiori': (2043, 545)}, 
+    'None': {'Jolly@_None': (2043, 3185), 'Back_None': (2043, 3845)}
+}
 
-mano = ['10_quadri', '9_quadri', '8_quadri', '7_quadri', '6_quadri', '5_quadri', '4_quadri', '3_quadri']
+def main():
+    root = tk.Tk()
+    game_ui = GameUI(root)
+    root.after(10000, lambda: game_ui.update_player_cards(["K_quadri"]))  # Aggiorna le carte dopo 5 secondi (5000 millisecondi)
+    root.mainloop()
 
-gioco = FrameGioco(coordinate_carte)
-gioco.richiediMano(mano)
+if __name__ == "__main__":
+    main()
