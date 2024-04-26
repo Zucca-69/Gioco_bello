@@ -2,6 +2,8 @@ import tkinter as tk
 from PIL import ImageTk, Image
 import os
 
+from Main import *
+
 # Load the original image
 current_dir = os.path.dirname(__file__)
 image_path = os.path.join(current_dir, "imm", "OIUGSZ0.jpg")
@@ -18,29 +20,36 @@ class GameUI:
         self.master.title("Regicide - partita in corso")
         self.master.geometry("1000x600")
         self.master.configure(bg="#106040")
-        self.master.minsize(1000, 700)
+        self.master.minsize(1100, 600)
         
         # Frame per le carte del giocatore
         self.player_frame = tk.Frame(self.master)
-        self.player_frame.pack(side=tk.BOTTOM)
+        self.player_frame.pack(side=tk.BOTTOM, pady = 20)
         
-        # Frame per la carta al centro del tavolo
-        self.table_frame = tk.Frame(self.master)
-        self.table_frame.pack()
-        
-        # Esempio di carte per il giocatore
-        self.player_cards = ['A_cuori', '2_picche', '3_quadri']
-        
-        # Esempio di carta al tavolo
-        self.table_card = 'J_picche'
+        # definisco il gioco a cui mi riferisco
+        self.gioco = Game(1)
+
+        # carte da mostrare
+        self.card_castello = self.gioco.getEnemy().getEnemyCard()
+        self.player_cards = []
 
         frame_castello = tk.Frame(self.master, width=450, height=300, bg="#106040")
         frame_castello.pack()
-        frame_castello.place(anchor='center', relx=0.5, rely=0.4)
-        self.show_card(frame_castello, self.table_card)
+        frame_castello.place(anchor='center', relx=0.5, rely=0.35)
+        self.show_card(frame_castello, self.card_castello)
         
         # Mostra le carte del giocatore
         self.show_player_cards()
+
+        # Bottone per la rinuncia del turno
+        self.button_rinuncia = tk.Button(self.master, text="Rinuncia", command=self.rinuncia_turno)
+        self.button_rinuncia.place(relx=0.97, rely=0.97, anchor='se')
+
+    def rinuncia_turno(self):
+        self.gioco.rinuncia(True)
+    
+    def card_clicked(self, event, card):
+        self.gioco.action_done(card)
 
     def show_player_cards(self):
         for card in self.player_cards:
@@ -48,7 +57,7 @@ class GameUI:
             frame.pack(side=tk.LEFT)
             self.show_card(frame, card)
 
-    def update_player_cards(self, new_cards):
+    def update_player_showed_cards(self, new_cards):
         # Rimuove le vecchie carte
         for widget in self.player_frame.winfo_children():
             widget.destroy()
@@ -56,6 +65,10 @@ class GameUI:
         # Aggiunge le nuove carte
         self.player_cards = new_cards
         self.show_player_cards()
+
+    def update_mano_player(mano):
+        self.player_cards = mano
+        self.update_player_showed_cards()
 
     def show_card(self, frame, card):
         card_coordinates = coordinate_carte[card.split("_")[1]][card]
@@ -84,10 +97,7 @@ class GameUI:
             label.bind("<Button-1>", lambda event: self.card_clicked(event, card))
 
         except Exception as e:
-            print("Errore durante la visualizzazione dell'immagine:", e)
-
-    def card_clicked(self, event, card):
-        print("Hai cliccato sulla carta:", card)
+            print("Errore durante la visualizzazione dell'immagine:", e)    
 
     def get_card_image(self, card):
         # Ottieni le coordinate della carta
@@ -114,8 +124,13 @@ coordinate_carte = {
 def main():
     root = tk.Tk()
     game_ui = GameUI(root)
-    root.after(10000, lambda: game_ui.update_player_cards(["K_quadri"]))  # Aggiorna le carte dopo 5 secondi (5000 millisecondi)
+    # game_ui.update_player_showed_cards(["K_quadri"])
     root.mainloop()
-
+'''
 if __name__ == "__main__":
     main()
+'''
+root = tk.Tk()
+Schermata = GameUI(root)
+
+giocata = Game(1)
