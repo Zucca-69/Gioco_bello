@@ -12,32 +12,32 @@ class Game:
         self.__player_cards = []
         self.__lista_giocate = []
         self.__enemy_card = None
+        self.__nemico= Enemy()
 
         self.__setup_game()
-        print(self.__giocatori)
-        print(self.__current_player_index)
-        print(self.__giocatori[0].seeHand())
 
         self.__gui = GameUI(self.__nemico.getEnemyCard()[0])
         self.__gui.add_game_instance(self)
 
         self.cambio_turno() # faccio partire il primo giocatore
 
-        self.__gui.add_player_hand(self.__giocatori[self.__current_player_index].seeHand())
+        self.__gui.add_player_hand(self.__player_cards)
 
     def cambio_turno(self):
         if self.__current_player_index + 1 == self.__n_giocatori:
             self.__current_player_index = 0
-        
-        #mostro le carte del nuovo giocatore
-        self.__gui.add_player_hand(self.__giocatori[self.__current_player_index].seeHand())
+        self.__player_cards = self.__giocatori[self.__current_player_index].seeHand()
+        self.__gui.add_player_hand(self.__player_cards)
+
+        # da togliere (per verificare carte)
+        print(self.__player_cards)
         
         self.__animale = True
         self.__lista_giocate = []
         self.__tot = 0
 
         self.__gui.master.mainloop()
-        exit() # unavolta chiusa la schermata termino l'esecuzione di tutto
+        exit() # una volta chiusa la schermata termino l'esecuzione di tutto
 
     def get_player_cards(self):
         return self.__player_cards
@@ -46,18 +46,30 @@ class Game:
         return self.__enemy_card
 
     def got_card(self, card):
+        if card in self.__player_cards:
+            self.__player_cards.remove(card)
+            self.__giocatori[self.__current_player_index].selectCard(card)
+            self.__lista_giocate.append(card)
+
+            self.__gui.update_player_showed_cards(self.__giocatori[self.__current_player_index].seeHand())
+
+
         if card[0]=="A" and self.__animale: # se la prima carta è un animale
-            self.__gui.update_player_showed_cards()
+            pass
 
     def rinuncia_turno(self):
         # se rinuncio il turno
-        if len(self.__lista_giocate) == 0: # e non ho giocato carte
-            self.cambio_turno() # tocca al prossimo
-        else: 
-            attacca_nemico()
+        if len(self.__lista_giocate) != 0: # e non ho giocato carte
+            self.attacca_nemico()
+        self.cambio_turno() # tocca al prossimo
 
     def attacca_nemico(self):
-        pass 
+        self.__gui.update_card(self.__gui.get_enemy_frame(), self.draw_new_enemy_card()[0])
+    
+    def draw_new_enemy_card(self):
+        # pesco nemico 
+        self.__nemico.addStats(self.__castello.pickCard())
+        return self.__nemico.getEnemyCard()
 
     def __setup_game(self):
         #creo gli scarti
@@ -71,9 +83,7 @@ class Game:
             self.__castello.addCard("J", seme)
         self.__castello.shuffle()
 
-        # pesco nemico 
-        self.__nemico= Enemy()
-        self.__nemico.addStats(self.__castello.pickCard())
+        self.draw_new_enemy_card()
 
         #creo il mazzo da cui pescare
         self.__taverna=Mazzo()
@@ -121,4 +131,4 @@ class Game:
             for i in giocatori:
                 i.draw(self.__taverna.pickCard())
 
-giocata = Game(2)
+giocata = Game(1)
