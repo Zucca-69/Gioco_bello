@@ -102,8 +102,6 @@ class GameUI:
         if puoi_giocare_ancora == False:
             self.__finisci_turno()
 
-
-
     def update_player_showed_cards(self, new_cards):
         for widget in self.__player_frame.winfo_children():
             widget.destroy()

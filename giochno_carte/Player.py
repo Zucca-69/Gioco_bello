@@ -99,3 +99,6 @@ class Player:
 
     def getDifesa(self):
         return self.__defence
+
+    def getImmunità(self):
+        return self.__immunità
