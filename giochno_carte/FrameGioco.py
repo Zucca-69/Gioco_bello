@@ -20,6 +20,7 @@ class GameUI:
         self.master.configure(bg="#106040")
         self.master.minsize(1200, 600)
         self.__scarto = None
+        self.__difesa = 0
 
         self.__enemy_card = enemy_card
         self.__player_cards = []
@@ -32,7 +33,19 @@ class GameUI:
         self.__game = instance
         self.__init_widgets()
 
+    def mod_difesa(self, new_value):
+        self.__difesa = new_value
+        
+        #cancello e riscrivo la label
+        self.__label_difesa.place_forget()
+        self.__label_difesa = tk.Label(self.master, text = f"Difesa: {self.__difesa}", font = ("Arial", 18))
+        self.__label_difesa.place(anchor="sw", relx= 0.02, rely= 0.98)
+
     def __init_widgets(self):
+        # label per la difesa passiva
+        self.__label_difesa = tk.Label(self.master, text = f"Difesa: {self.__difesa}", font = ("Arial", 18))
+        self.__label_difesa.place
+
         # imposto il frame del castello (e mostro il nemico)
         self.__frame_castello = tk.Frame(self.master, width=142, height=200, bg="#106040")
         self.__frame_castello.place(anchor='center', relx=0.5, rely=0.35)
@@ -76,9 +89,8 @@ class GameUI:
 
         self.__show_card(frame, new_card)
 
-
     def __card_clicked(self, card):
-        self.__game.got_card(card)
+        puoi_giocare_ancora = self.__game.got_card(card)
         
         # Se il frame della carta è il castello, non aggiornare il mazzo degli scarti
         if card != self.__enemy_card:
@@ -86,6 +98,10 @@ class GameUI:
             self.update_card(self.__frame_scarti, card)
 
         self.update_player_showed_cards(self.__game.get_player_cards())
+
+        if puoi_giocare_ancora == False:
+            self.__finisci_turno()
+
 
 
     def update_player_showed_cards(self, new_cards):

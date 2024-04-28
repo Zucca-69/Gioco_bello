@@ -96,3 +96,6 @@ class Player:
         
     def defenceReset(self):
         self.__defence= 0
+
+    def getDifesa(self):
+        return self.__defence

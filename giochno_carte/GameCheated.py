@@ -31,6 +31,7 @@ class Game:
         self.__gui.add_player_hand(self.__player_cards)
         
         self.__animale = True
+        self.__aggiungi_carte = True
         self.__lista_giocate = []
         self.__tot = 0
 
@@ -44,27 +45,21 @@ class Game:
         return self.__enemy_card
 
     def got_card(self, card):
-        if card in self.__player_cards:
+        if card in self.__player_cards and self.__aggiungi_carte == True:
             self.__giocatori[self.__current_player_index].selectCard(card)
             self.__player_cards.remove(card)
             self.__lista_giocate.append(card)
 
-            if len(self.__lista_giocate) == 2 and self.__lista_giocate[0][0] == "A":
-                self.finisci_turno()
-
             self.__gui.update_player_showed_cards(self.__giocatori[self.__current_player_index].seeHand())
+            
+            if len(self.__lista_giocate) == 2 and self.__lista_giocate[0][0] == "A":
+                self.__aggiungi_carte = False
+                return False
+            return True
 
+        # TODO: implementa questa parte 
         '''
-        if card[0] != "A" or self.__animale == False: # se la prima carta è un animale
-            #chiedi per rinuncia
-            card = input("vuoi giocare un altra carta? (s/n): ")
-            print(giocatore.seeHand())
-            if card == "" or card[0].lower() == "s":
-                animale = False
-                card= giocatore.selectCard(input("scegli una altra carta: "))
-                lista_giocate.append(card)                    
-
-        elif str(card[0]).isdigit() == True: # se la prima carta è normale
+        if str(card[0]).isdigit() == True: # se la prima carta è normale
             #gioca carte con lo stesso simbolo
             if int(card[0]) >= 2 and int(card[0]) <= 5:
                 giocabili = []
@@ -81,6 +76,8 @@ class Game:
         self.cambio_turno() # tocca al prossimo
 
     def attacca_giocatore(self):
+        self.__gui.mod_difesa(self.__giocatori[self.__current_player_index].getDifesa())
+
         if self.__sconfittoNelTurno == False:    
             # il nemico attacca e si verifica se il gioco continua (giocatore ancora vivo)
             self.__continua= self.__giocatori[self.__current_player_index].subisciDanno(self.__nemico.getStats()["attack"])
@@ -90,6 +87,9 @@ class Game:
     
     def effetti_globali(self, att):
         # effetti cuori
+        if "picche" in att[1]: # modifico la difesa per tkinter
+            self.__gui.mod_difesa(self.__giocatori[self.__current_player_index].getDifesa())
+
         if "cuori" in att[1]:
             self.__scarti.shuffle()
             for _ in range(att[0]): #ripeti n volte la pesca
@@ -126,14 +126,16 @@ class Game:
 
             # conquistato (?)  
             if risultatoAttacco[1] == True: 
-                self.__taverna.addCard(self.__nemico.getEnemyCard())
-                print("sesso")
+                self.__taverna.addCard(self.__nemico.getEnemyCard(), True) # aggiungo come prima carta
+                print("nemico conquistato")
             else: 
                 self.__scarti.addCard(self.__nemico.getEnemyCard())
-                
+                print("nemico sconfitto")
+
             # se è un re, abbasso il counter
             if self.__nemico.getStats()["attack"]==20: 
                 self.__re -= 1
+                print(f"hai abbattuto un re, ne rimangono {self.__re}")
     
             if self.check_vittoria() == True:
                 print("HAI VINTO")
