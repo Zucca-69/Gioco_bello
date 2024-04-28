@@ -8,21 +8,36 @@ class Game:
     def __init__(self, n_giocatori):
         self.__n_giocatori = n_giocatori
         self.__giocatori = []
-        self.__current_player_index = 0
+        self.__current_player_index = n_giocatori - 1
         self.__player_cards = []
+        self.__lista_giocate = []
         self.__enemy_card = None
 
         self.__setup_game()
+        print(self.__giocatori)
+        print(self.__current_player_index)
+        print(self.__giocatori[0].seeHand())
 
         self.__gui = GameUI(self.__nemico.getEnemyCard()[0])
         self.__gui.add_game_instance(self)
 
+        self.cambio_turno() # faccio partire il primo giocatore
+
+        self.__gui.add_player_hand(self.__giocatori[self.__current_player_index].seeHand())
+
     def cambio_turno(self):
         if self.__current_player_index + 1 == self.__n_giocatori:
             self.__current_player_index = 0
+        
+        #mostro le carte del nuovo giocatore
+        self.__gui.add_player_hand(self.__giocatori[self.__current_player_index].seeHand())
+        
         self.__animale = True
         self.__lista_giocate = []
         self.__tot = 0
+
+        self.__gui.master.mainloop()
+        exit() # unavolta chiusa la schermata termino l'esecuzione di tutto
 
     def get_player_cards(self):
         return self.__player_cards
@@ -52,8 +67,8 @@ class Game:
         self.__castello=Mazzo()
         for seme in ["picche","fiori","quadri","cuori"]:
             self.__castello.addCard("K", seme)
-            self.__castello.addCard("J", seme)
             self.__castello.addCard("Q", seme)
+            self.__castello.addCard("J", seme)
         self.__castello.shuffle()
 
         # pesco nemico 
@@ -66,6 +81,8 @@ class Game:
             self.__taverna.addCard("A", seme)
             for numero in range(2,11):
                 self.__taverna.addCard(str(numero), seme)
+            
+        self.creaGiocatori()
 
         #condizioni di gioco
         self.__re= 4
@@ -95,7 +112,7 @@ class Game:
 
         # mescolo il mazzo
         self.__taverna.shuffle()
-        
+
         # imposto val num max carte e faccio pescare i vari giocatori
         for giocatore in giocatori:
             giocatore.setMaxCarte(self.__numMaxCarte)

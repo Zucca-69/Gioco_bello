@@ -21,6 +21,7 @@ class GameUI:
         self.master.minsize(1100, 600)
 
         self.__enemy_card = enemy_card
+        self.__player_cards = []
 
     def update_enemy_card(self, card):
         self.__enemy_card = card
@@ -52,10 +53,12 @@ class GameUI:
         self.__button_rinuncia = tk.Button(self.master, text="Rinuncia", command=self.__rinuncia_turno)
         self.__button_rinuncia.place(relx=0.97, rely=0.97, anchor='se')
 
-        self.master.mainloop()
-
+    def add_player_hand(self, players_hand):
+        self.__player_cards= players_hand
+        self.__show_player_cards()
+    
     def __show_player_cards(self):
-        for card in self.__game.get_player_cards():
+        for card in self.__player_cards:
             frame = tk.Frame(self.__player_frame)
             frame.pack(side=tk.LEFT)
             self.__show_card(frame, card)
@@ -88,9 +91,14 @@ class GameUI:
 
                 img = ImageTk.PhotoImage(cropped_img)
 
-                button = tk.Button(frame, image=img, bd=0, command=lambda: self.__card_clicked(card))
-                button.image = img
-                button.pack()
+                # uso una label per non avere i bordi del bottone
+                label = tk.Label(frame, image=img, bd=0, highlightthickness=0)
+                label.image = img
+                label.pack()
+
+                # collego alla label un bottone
+                label.bind("<Button-1>", lambda event, card=card: self.__card_clicked(card))
+
 
             except Exception as e:
                 print("Errore durante la visualizzazione dell'immagine:", e)    
