@@ -34,6 +34,13 @@ class Game:
         self.__aggiungi_carte = True
         self.__lista_giocate = []
         self.__tot = 0
+        
+        try: 
+            self.turno += 1
+        except:
+            self.turno = 0
+
+        print(f"\n--- NUOVO TURNO ({self.turno}) ---\n")
 
         self.__gui.master.mainloop()
         exit() # una volta chiusa la schermata termino l'esecuzione di tutto
@@ -50,23 +57,32 @@ class Game:
             self.__player_cards.remove(card)
             self.__lista_giocate.append(card)
 
+            # aggiorno le carte del giocatore sullo scermo 
             self.__gui.update_player_showed_cards(self.__giocatori[self.__current_player_index].seeHand())
             
-            if len(self.__lista_giocate) == 2 and self.__lista_giocate[0][0] == "A":
-                self.__aggiungi_carte = False
-                return False
-            return True
+            first_digit = self.__lista_giocate[0][0]
+            print(self.__lista_giocate) # TODO: rimuovere questa riga
 
-        # TODO: implementa questa parte 
-        '''
-        if str(card[0]).isdigit() == True: # se la prima carta è normale
-            #gioca carte con lo stesso simbolo
-            if int(card[0]) >= 2 and int(card[0]) <= 5:
-                giocabili = []
-                for carta in giocatore.seeHand():
-                    if carta[0] == str(card[0]):
-                        giocabili.append(carta)
-        '''
+            # animale
+            if first_digit == "A" and self.__animale:
+                self.__animale = False
+                return True
+
+            # carte con lo stesso simbolo e tot <= 10
+            if str(first_digit).isdigit() == True:  # se la prima carta è normale
+                self.__tot += int(first_digit)
+                if int(first_digit) >= 2 and int(first_digit) <= 5 and self.__tot + int(first_digit) <= 10:
+                    giocabili = [] 
+                    for carta in self.__giocatori[self.__current_player_index].seeHand():
+                        if carta[0] == str(first_digit):
+                            giocabili.append(carta)
+
+                    if len(giocabili) > 0: 
+                        self.__gui.add_player_hand(giocabili)
+                        return True
+
+            self.__gui.add_player_hand(self.__player_cards)
+            return False
 
     def finisci_turno(self):
         # se rinuncio il turno
@@ -146,6 +162,8 @@ class Game:
             # azzero la difesa una volta finito lo scontro
             for i in self.__giocatori: 
                 i.defenceReset()
+        else:
+            print(self.__nemico.getStats())
     
     def check_vittoria(self):
         if self.__re == 0:
