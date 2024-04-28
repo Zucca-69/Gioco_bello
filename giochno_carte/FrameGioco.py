@@ -16,9 +16,9 @@ class GameUI:
         self.master = tk.Tk()
         self.__game = None
         self.master.title("Regicide - partita in corso")
-        self.master.geometry("1000x600")
+        self.master.geometry("1200x600")
         self.master.configure(bg="#106040")
-        self.master.minsize(1100, 600)
+        self.master.minsize(1200, 600)
         self.__scarto = None
 
         self.__enemy_card = enemy_card
@@ -43,23 +43,23 @@ class GameUI:
         self.__frame_scarti.place(anchor='center', relx=0.3, rely=0.35)
 
         # imposto frame del giocatore 
-        self.__player_frame = tk.Frame(self.master)
+        self.__player_frame = tk.Frame(self.master, bg = "#106040")
         self.__player_frame.pack(side=tk.BOTTOM, pady=20)
 
         # mostro le carte del giocatore
         self.__show_player_cards()
 
-        # metto il tasto per la rinuncia 
-        self.__button_rinuncia = tk.Button(self.master, text="Rinuncia", command=self.__rinuncia_turno)
-        self.__button_rinuncia.place(relx=0.97, rely=0.97, anchor='se')
+        # metto il tasto per terminare il turno 
+        self.__button_finisci = tk.Button(self.master, text="Termina", command=self.__finisci_turno)
+        self.__button_finisci.place(relx=0.98, rely=0.98, anchor='se')
 
     def add_player_hand(self, players_hand):
         self.__player_cards= players_hand
-        self.__show_player_cards()
+        self.update_player_showed_cards(players_hand)
     
     def __show_player_cards(self):
         for card in self.__player_cards:
-            frame = tk.Frame(self.__player_frame)
+            frame = tk.Frame(self.__player_frame, bg = "#106040")
             frame.pack(side=tk.LEFT)
             self.__show_card(frame, card)
 
@@ -119,8 +119,8 @@ class GameUI:
             except Exception as e:
                 print("Errore durante la visualizzazione dell'immagine:", e)    
 
-    def __rinuncia_turno(self):
-        self.__game.rinuncia_turno()
+    def __finisci_turno(self):
+        self.__game.finisci_turno()
 
     def get_enemy_frame(self):
         return self.__frame_castello
