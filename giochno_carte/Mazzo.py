@@ -2,30 +2,38 @@ import random
 
 class Mazzo:
     def __init__(self):
-        self.__deck={}
-        self.__semi=("picche","fiori","quadri","cuori", None)
+        self.__deck = {}
+        self.__semi = ("picche", "fiori", "quadri", "cuori", None)
 
-    def addCard(self,numero, seme = None):
+    def addCard(self, numero, seme=None):
         if type(numero) == str:
             if seme in self.__semi:
                 chiave_carta = f"{numero}_{seme}"
                 self.__deck[chiave_carta] = seme
             return True
         return False
-        
+
     def shuffle(self):
-        # Estrai tutte le chiavi (carte) dal mazzo
         carte = list(self.__deck.keys())
-        # Mischia le carte
         random.shuffle(carte)
-        # Ricostruisci il mazzo con le carte mescolate
         self.__deck = {carta: self.__deck[carta] for carta in carte}
 
     def seeDeck(self):
         return self.__deck
-    
-    def pickCard(self):
-        #è l'ultima carta ma dettagli, forse meglio così
-        #card=tupla -> (chiave_carta, seme)
-        card=self.__deck.popitem()
-        return card
+
+    def pickCard(self, first=False):
+        if first:
+            # Estrai la prima carta se richiesto
+            if self.__deck:
+                carta, seme = next(iter(self.__deck.items()))
+                del self.__deck[carta]
+                return carta, seme
+            else:
+                return None, None
+        else:
+            # Estrai l'ultima carta come fatto precedentemente
+            if self.__deck:
+                carta, seme = self.__deck.popitem()
+                return carta, seme
+            else:
+                return None, None

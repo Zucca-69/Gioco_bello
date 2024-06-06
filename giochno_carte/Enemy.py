@@ -1,5 +1,4 @@
 class Enemy:
-
     def __init__(self):
         self.__card= None # tuple(segno_seme, seme) es("J_cuori", "cuori")
         self.__health= 0
