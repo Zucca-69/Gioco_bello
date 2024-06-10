@@ -51,7 +51,7 @@ class Game:
     def get_enemy_card(self):
         return self.__enemy_card
 
-    def got_card(self, card):
+    def got_attack_card(self, card):
         if card in self.__player_cards and self.__aggiungi_carte == True:
             self.__giocatori[self.__current_player_index].selectCard(card)
             self.__player_cards.remove(card)

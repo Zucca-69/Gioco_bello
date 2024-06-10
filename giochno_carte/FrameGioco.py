@@ -90,7 +90,7 @@ class GameUI:
         self.__show_card(frame, new_card)
 
     def __card_clicked(self, card):
-        puoi_giocare_ancora = self.__game.got_card(card)
+        puoi_giocare_ancora = self.__game.got_attack_card(card)
         
         # Se il frame della carta è il castello, non aggiornare il mazzo degli scarti
         if card != self.__enemy_card:
